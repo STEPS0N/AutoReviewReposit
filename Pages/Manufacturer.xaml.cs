@@ -102,6 +102,7 @@ namespace AutoReview.Pages
                     using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
                     {
                         var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
+                        
                         if (manufacturer != null)
                         {
                             manufacturer.Title_Brand = control.ManufacturerTitle;
@@ -136,6 +137,7 @@ namespace AutoReview.Pages
                     using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
                     {
                         var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+                        
                         if (manufacturer != null)
                         {
                             context.Manufacturer.Remove(manufacturer);

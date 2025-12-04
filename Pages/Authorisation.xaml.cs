@@ -32,7 +32,7 @@ namespace AutoReview.Pages
         private void Entry(object sender, RoutedEventArgs e)
         {
             string login = tb_login.Text;
-            string password = tb_password.Text;
+            string password = tb_password.Password;
 
             using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={login};password={password};"))
             {

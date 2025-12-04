@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoReview;
+using AutoReview.Classes;
+using AutoReview.Elements;
+using AutoReview.EntityFramework;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AutoReview.Pages
 {
@@ -26,26 +20,145 @@ namespace AutoReview.Pages
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            LoadData();
         }
 
-        private void BackMenu(object sender, RoutedEventArgs e)
+        private void LoadData()
         {
-
+            using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            {
+                engineList.ItemsSource = context.Engine.ToList();
+            }
         }
 
         private void AddEngine(object sender, RoutedEventArgs e)
         {
+            var window = new Window
+            {
+                Title = "Добавить двигатель",
+                Height = 300,
+                Width = 400,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ResizeMode = ResizeMode.NoResize
+            };
 
+            var editControl = new EngineEditControl
+            {
+                EngineType = "",
+                EngineCapacity = "",
+                EnginePower = "",
+                EngineId = null
+            };
+
+            editControl.OnSave += (control) =>
+            {
+                using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+                {
+                    var engine = new Classes.Engine
+                    {
+                        Type_Engine = control.EngineType,
+                        Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0,
+                        Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0
+                    };
+
+                    context.Engine.Add(engine);
+                    context.SaveChanges();
+
+                    MessageBox.Show($"Двигатель {engine.Type_Engine} успешно добавлен!");
+
+                    window.Close();
+                    LoadData();
+                }
+            };
+
+            editControl.OnCancel += () => window.Close();
+
+            window.Content = editControl;
+            window.ShowDialog();
         }
 
         private void EditEngine(object sender, RoutedEventArgs e)
         {
+            if (engineList.SelectedItem is Classes.Engine selected)
+            {
+                var window = new Window
+                {
+                    Title = "Редактировать двигатель",
+                    Width = 400,
+                    Height = 350,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    ResizeMode = ResizeMode.NoResize
+                };
 
+                var editControl = new EngineEditControl
+                {
+                    EngineType = selected.Type_Engine,
+                    EngineCapacity = selected.Capacity_Engine.ToString(),
+                    EnginePower = selected.Power_Engine.ToString(),
+                    EngineId = selected.Id_Engine
+                };
+
+                editControl.OnSave += (control) =>
+                {
+                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
+                    {
+                        var engine = context.Engine.Find(control.EngineId);
+                        
+                        if (engine != null)
+                        {
+                            engine.Type_Engine = control.EngineType;
+                            engine.Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0;
+                            engine.Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0;
+
+                            context.SaveChanges();
+                            MessageBox.Show("Двигатель обновлен!");
+
+                            window.Close();
+                            LoadData();
+                        }
+                    }
+                };
+
+                editControl.OnCancel += () => window.Close();
+                window.Content = editControl;
+                window.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Выберите двигатель для редактирования!");
+            }
         }
 
         private void DeleteEngine(object sender, RoutedEventArgs e)
         {
+            if (engineList.SelectedItem is Classes.Engine selected)
+            {
+                if (MessageBox.Show($"Удалить двигатель {selected.Type_Engine}?",
+                    "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
+                    {
+                        var engine = context.Engine.Find(selected.Id_Engine);
 
+                        if (engine != null)
+                        {
+                            context.Engine.Remove(engine);
+                            context.SaveChanges();
+                            MessageBox.Show("Двигатель удален!");
+                            LoadData();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите двигатель для удаления!");
+            }
+        }
+
+        private void BackMenu(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

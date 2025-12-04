@@ -50,7 +50,7 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10">
             <Border>
-                <DataGrid x:Name="usersList"
+                <DataGrid x:Name="engineList"
                       Background="White"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"

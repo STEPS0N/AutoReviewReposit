@@ -19,7 +19,7 @@ namespace AutoReview.Elements
     /// </summary>
     public partial class EngineEditControl : UserControl
     {
-        public event Action<Engine> OnSave;
+        public event Action<EngineEditControl> OnSave;
         public event Action OnCancel;
 
         public EngineEditControl()
@@ -29,37 +29,42 @@ namespace AutoReview.Elements
 
         public string EngineType
         {
-            get => EngineType;
-            set => EngineType = value;
+            get => TypeBox.Text;
+            set => TypeBox.Text = value;
         }
 
         public string EngineCapacity
         {
-            get => EngineCapacity;
-            set => EngineCapacity = value;
+            get => CapacityBox.Text;
+            set => CapacityBox.Text = value;
         }
 
         public string EnginePower
         {
-            get => EnginePower;
-            set => EnginePower = value;
+            get => PowerBox.Text;
+            set => PowerBox.Text = value;
         }
+
+        public int? EngineId { get; set; }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (TypeBox.Items.Count == 0)
+            if (string.IsNullOrWhiteSpace(EngineType))
             {
                 MessageBox.Show($"Введите тип двигателя");
+                return;
             }
 
-            if (string.IsNullOrEmpty(CapasityBox.Text))
+            if (string.IsNullOrEmpty(EngineCapacity) && (!decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0))
             {
-
+                MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
+                return;
             }
 
-            if (string.IsNullOrEmpty(PowerBox.Text))
+            if (string.IsNullOrEmpty(EnginePower) && (!int.TryParse(EnginePower, out int power) || power <= 0))
             {
-
+                MessageBox.Show("Введите мощность двигателя! (Пример: 150)");
+                return;
             }
 
             OnSave?.Invoke(this);
