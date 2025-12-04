@@ -15,20 +15,19 @@ namespace AutoReview.Pages
     public partial class Engine : Page
     {
         public MainWindow mainWindow;
+        private AppDbContext context;
 
         public Engine(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
             LoadData();
         }
 
         private void LoadData()
         {
-            using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
-            {
-                engineList.ItemsSource = context.Engine.ToList();
-            }
+            engineList.ItemsSource = context.Engine.ToList();
         }
 
         private void AddEngine(object sender, RoutedEventArgs e)
@@ -52,23 +51,22 @@ namespace AutoReview.Pages
 
             editControl.OnSave += (control) =>
             {
-                using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+
+                var engine = new Classes.Engine
                 {
-                    var engine = new Classes.Engine
-                    {
-                        Type_Engine = control.EngineType,
-                        Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0,
-                        Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0
-                    };
+                    Type_Engine = control.EngineType,
+                    Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0,
+                    Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0
+                };
 
-                    context.Engine.Add(engine);
-                    context.SaveChanges();
+                context.Engine.Add(engine);
+                context.SaveChanges();
 
-                    MessageBox.Show($"Двигатель {engine.Type_Engine} успешно добавлен!");
+                MessageBox.Show($"Двигатель {engine.Type_Engine} успешно добавлен!");
 
-                    window.Close();
-                    LoadData();
-                }
+                window.Close();
+                LoadData();
+
             };
 
             editControl.OnCancel += () => window.Close();
@@ -100,23 +98,22 @@ namespace AutoReview.Pages
 
                 editControl.OnSave += (control) =>
                 {
-                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
+
+                    var engine = context.Engine.Find(control.EngineId);
+                    
+                    if (engine != null)
                     {
-                        var engine = context.Engine.Find(control.EngineId);
-                        
-                        if (engine != null)
-                        {
-                            engine.Type_Engine = control.EngineType;
-                            engine.Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0;
-                            engine.Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0;
+                        engine.Type_Engine = control.EngineType;
+                        engine.Capacity_Engine = decimal.TryParse(control.EngineCapacity, out decimal capacity) ? capacity : 0;
+                        engine.Power_Engine = int.TryParse(control.EnginePower, out int power) ? power : 0;
 
-                            context.SaveChanges();
-                            MessageBox.Show("Двигатель обновлен!");
+                        context.SaveChanges();
+                        MessageBox.Show("Двигатель обновлен!");
 
-                            window.Close();
-                            LoadData();
-                        }
+                        window.Close();
+                        LoadData();
                     }
+
                 };
 
                 editControl.OnCancel += () => window.Close();
@@ -136,17 +133,14 @@ namespace AutoReview.Pages
                 if (MessageBox.Show($"Удалить двигатель {selected.Type_Engine}?",
                     "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
-                    {
-                        var engine = context.Engine.Find(selected.Id_Engine);
+                    var engine = context.Engine.Find(selected.Id_Engine);
 
-                        if (engine != null)
-                        {
-                            context.Engine.Remove(engine);
-                            context.SaveChanges();
-                            MessageBox.Show("Двигатель удален!");
-                            LoadData();
-                        }
+                    if (engine != null)
+                    {
+                        context.Engine.Remove(engine);
+                        context.SaveChanges();
+                        MessageBox.Show("Двигатель удален!");
+                        LoadData();
                     }
                 }
             }

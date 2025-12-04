@@ -1,4 +1,8 @@
-﻿using System;
+﻿using AutoReview.Classes;
+using AutoReview.Elements;
+using AutoReview.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,36 +25,154 @@ namespace AutoReview.Pages
     public partial class Equipment : Page
     {
         public MainWindow mainWindow;
+        private AppDbContext context;
 
         public Equipment(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            LoadData();
         }
 
-        private void Search_Click(object sender, RoutedEventArgs e)
+        private void LoadData()
         {
+            try
+            {
+                var equipmentData = context.Equipment
+                    .Include(e => e.Car)
+                    .ThenInclude(c => c.Manufacturer)
+                    .ToList();
 
+                equipmentList.ItemsSource = equipmentData;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private void AddEquipment(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var window = new Window
+                {
+                    Title = "Добавить комплектацию",
+                    Width = 400,
+                    Height = 350,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    ResizeMode = ResizeMode.NoResize
+                };
+
+                var editControl = new EquipmentEditControl();
+                editControl.EquipmentId = null;
+
+                var cars = context.Car.ToList();
+                editControl.SetData(cars);
+
+                editControl.OnSave += (control) =>
+                {
+                    var equipment = new Classes.Equipment
+                    {
+                        Title_Equipment = control.Title,
+                        Equipment_Level = control.Level,
+                        Car_Id = control.CarId ?? 0
+                    };
+
+                    context.Equipment.Add(equipment);
+                    context.SaveChanges();
+
+                    MessageBox.Show("Комплектация добавлена!");
+                    window.Close();
+                    LoadData();
+                };
+
+                editControl.OnCancel += () => window.Close();
+                window.Content = editControl;
+                window.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private void EditEquipment(object sender, RoutedEventArgs e)
+        {
+            if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
+            {
+
+                var window = new Window
+                {
+                    Title = "Редактировать комплектацию",
+                    Width = 400,
+                    Height = 350,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    ResizeMode = ResizeMode.NoResize
+                };
+
+                var editControl = new EquipmentEditControl();
+                editControl.EquipmentId = selectedEquipment.Id_Equipment;
+
+                var cars = context.Car.ToList();
+                editControl.SetData(cars, selectedEquipment);
+
+                editControl.OnSave += (control) =>
+                {
+                    var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
+                    
+                    if (equipment != null)
+                    {
+                        equipment.Title_Equipment = control.Title;
+                        equipment.Equipment_Level = control.Level;
+                        equipment.Car_Id = control.CarId ?? 0;
+
+                        context.SaveChanges();
+                        MessageBox.Show("Комплектация обновлена!");
+                        window.Close();
+                        LoadData();
+                    }
+                };
+
+                editControl.OnCancel += () => window.Close();
+                window.Content = editControl;
+                window.ShowDialog();
+
+            }
+            else
+            {
+                MessageBox.Show("Выберите комплектацию!");
+            }
+        }
+
+        private void DeleteEquipment(object sender, RoutedEventArgs e)
+        {
+            if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
+            {
+                if (MessageBox.Show($"Удалить комплектацию '{selectedEquipment.Title_Equipment}'?",
+                    "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
+                    
+                    if (equipment != null)
+                    {
+                        context.Equipment.Remove(equipment);
+                        context.SaveChanges();
+                        MessageBox.Show("Комплектация удалена!");
+                        LoadData();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите комплектацию!");
+            }
         }
 
         private void BackMenu(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void AddUser(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void EditUser(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DeleteUser(object sender, RoutedEventArgs e)
-        {
-
+            NavigationService.GoBack();
         }
     }
 }

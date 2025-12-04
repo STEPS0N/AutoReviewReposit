@@ -16,20 +16,19 @@ namespace AutoReview.Pages
     public partial class Manufacturer : Page
     {
         public MainWindow mainWindow;
+        private AppDbContext context;
 
         public Manufacturer(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
             LoadData();
         }
 
         private void LoadData()
         {
-            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
-            {
-                manufacturersList.ItemsSource = context.Manufacturer.ToList();
-            }
+            manufacturersList.ItemsSource = context.Manufacturer.ToList();
         }
 
         private void AddManufacture(object sender, RoutedEventArgs e)
@@ -52,25 +51,21 @@ namespace AutoReview.Pages
 
             editControl.OnSave += (control) =>
             {
-                using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+                var manufacturer = new Classes.Manufacturer
                 {
-                    var manufacturer = new Classes.Manufacturer
-                    {
-                        Title_Brand = control.ManufacturerTitle,
-                        Country_Brand = control.ManufacturerCountry
-                    };
+                    Title_Brand = control.ManufacturerTitle,
+                    Country_Brand = control.ManufacturerCountry
+                };
 
-                    context.Manufacturer.Add(manufacturer);
-                    context.SaveChanges();
+                context.Manufacturer.Add(manufacturer);
+                context.SaveChanges();
 
-                    MessageBox.Show($"Производитель {manufacturer.Title_Brand} успешно добавлен!");
+                MessageBox.Show($"Производитель {manufacturer.Title_Brand} успешно добавлен!");
 
-                    window.Close();
-                    LoadData();
-                }
+                window.Close();
+                LoadData();
             };
 
-            // Отмена
             editControl.OnCancel += () => window.Close();
 
             window.Content = editControl;
@@ -99,21 +94,18 @@ namespace AutoReview.Pages
 
                 editControl.OnSave += (control) =>
                 {
-                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
+                    var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
+                    
+                    if (manufacturer != null)
                     {
-                        var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
-                        
-                        if (manufacturer != null)
-                        {
-                            manufacturer.Title_Brand = control.ManufacturerTitle;
-                            manufacturer.Country_Brand = control.ManufacturerCountry;
+                        manufacturer.Title_Brand = control.ManufacturerTitle;
+                        manufacturer.Country_Brand = control.ManufacturerCountry;
 
-                            context.SaveChanges();
-                            MessageBox.Show("Производитель обновлен!");
+                        context.SaveChanges();
+                        MessageBox.Show("Производитель обновлен!");
 
-                            window.Close();
-                            LoadData();
-                        }
+                        window.Close();
+                        LoadData();
                     }
                 };
 
@@ -134,17 +126,14 @@ namespace AutoReview.Pages
                 if (MessageBox.Show($"Удалить производителя {selected.Title_Brand}?",
                     "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    using (var context = new AppDbContext(($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};")))
+                    var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+                    
+                    if (manufacturer != null)
                     {
-                        var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
-                        
-                        if (manufacturer != null)
-                        {
-                            context.Manufacturer.Remove(manufacturer);
-                            context.SaveChanges();
-                            MessageBox.Show("Производитель удален!");
-                            LoadData();
-                        }
+                        context.Manufacturer.Remove(manufacturer);
+                        context.SaveChanges();
+                        MessageBox.Show("Производитель удален!");
+                        LoadData();
                     }
                 }
             }

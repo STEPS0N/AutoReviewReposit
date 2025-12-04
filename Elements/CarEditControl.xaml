@@ -57,16 +57,13 @@
                 <ComboBoxItem>Болид</ComboBoxItem>
             </ComboBox>
 
-            <!-- Двигатель -->
             <TextBlock Text="Двигатель:" Foreground="White" Margin="0,0,0,5"/>
             <ComboBox x:Name="EngineBox" DisplayMemberPath="Type_Engine"
                      SelectedValuePath="Id_Engine" Margin="0,0,0,10"/>
 
-            <!-- Цена -->
             <TextBlock Text="Цена (₽):" Foreground="White" Margin="0,0,0,5"/>
             <TextBox x:Name="PriceBox" Margin="0,0,0,10"/>
 
-            <!-- Кнопки -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                 <Button Content="Сохранить" Click="SaveButton_Click" 
                         Background="#27AE60" Foreground="White" 

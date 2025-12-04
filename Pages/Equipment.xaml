@@ -50,7 +50,7 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10">
             <Border>
-                <DataGrid x:Name="usersList"
+                <DataGrid x:Name="equipmentList"
                       Background="White"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
@@ -95,7 +95,7 @@
                         HorizontalAlignment="Right"
                         Grid.Column="1">
                     <Button Content="Добавить"
-                        Click="AddUser"
+                        Click="AddEquipment"
                         Background="#26a69a" 
                         Foreground="White"
                         FontFamily="Montserrat"
@@ -103,7 +103,7 @@
                         Margin="0, 0, 10, 0"/>
 
                     <Button Content="Редактировать"
-                        Click="EditUser"
+                        Click="EditEquipment"
                         Background="#F39C12"
                         FontFamily="Montserrat"
                         Foreground="White"
@@ -111,7 +111,7 @@
                         Margin="0, 0, 10, 0"/>
 
                     <Button Content="Удалить"
-                        Click="DeleteUser"
+                        Click="DeleteEquipment"
                         Background="#E74C3C"
                         FontFamily="Montserrat"
                         Foreground="White"
