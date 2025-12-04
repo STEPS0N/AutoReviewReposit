@@ -32,7 +32,7 @@
     </Page.Resources>
 
     <Grid Background="#2C3E50">
-        <Border Background="#00000000">
+        <Grid Background="#00000000">
             <StackPanel>
                 <Border Height="100" Background="#1A252F" HorizontalAlignment="Stretch">
                     <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 11">
@@ -55,7 +55,6 @@
                         FontSize="18"
                         FontFamily="Montserrat"/>
                     <TextBox
-                        Text="dsada"
                         Padding="5"
                         x:Name="tb_login"
                         Width="250"
@@ -90,6 +89,6 @@
                         Margin="0, 130, 0, 0"/>
                 </StackPanel>
             </StackPanel>
-        </Border>
+        </Grid>
     </Grid>
 </Page>

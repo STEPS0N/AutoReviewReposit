@@ -30,7 +30,6 @@ namespace AutoReview.Elements
         public void SetData(List<Manufacturer> manufacturers, List<Engine> engines, Car car = null)
         {
             ManufacturerBox.ItemsSource = manufacturers;
-
             EngineBox.ItemsSource = engines;
 
             if (car != null)
@@ -40,8 +39,17 @@ namespace AutoReview.Elements
                 PriceBox.Text = car.Price_Car.ToString();
 
                 ManufacturerBox.SelectedValue = car.Manufacturer_Id;
-
                 EngineBox.SelectedValue = car.Engine_Id;
+
+                if (car.Manufacturer != null)
+                {
+                    ManufacturerBox.SelectedValue = car.Manufacturer.Id_Manufacturer;
+                }
+
+                if (car.Engine != null)
+                {
+                    EngineBox.SelectedValue = car.Engine.Id_Engine;
+                }
 
                 foreach (ComboBoxItem item in BodyTypeBox.Items)
                 {

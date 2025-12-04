@@ -64,6 +64,10 @@
 
                         <DataGridTextColumn Header="Страна производителя" 
                                         Binding="{Binding Country_Brand}" 
+                                        Width="300"/>
+
+                        <DataGridTextColumn Header="Email директора" 
+                                        Binding="{Binding Director_Email}" 
                                         Width="200"/>
                     </DataGrid.Columns>
                 </DataGrid>

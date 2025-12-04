@@ -52,10 +52,5 @@ namespace AutoReview.Pages
         {
             mainWindow.OpenPage(MainWindow.pages.users);
         }
-
-        private void Feedback_Click(object sender, RoutedEventArgs e)
-        {
-            mainWindow.OpenPage(MainWindow.pages.feedback);
-        }
     }
 }

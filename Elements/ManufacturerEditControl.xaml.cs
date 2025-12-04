@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoReview.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,9 +22,17 @@ namespace AutoReview.Elements
         public event Action<ManufacturerEditControl> OnSave;
         public event Action OnCancel;
 
+        public List<User> Users { get; set; }
+
         public ManufacturerEditControl()
         {
             InitializeComponent();
+        }
+
+        public void LoadUsers(List<User> users)
+        {
+            Users = users;
+            DirectorComboBox.ItemsSource = users;
         }
 
         public string ManufacturerTitle
@@ -36,6 +45,12 @@ namespace AutoReview.Elements
         {
             get => CountryBox.Text;
             set => CountryBox.Text = value;
+        }
+
+        public string DirectorEmail
+        {
+            get => DirectorComboBox.SelectedValue?.ToString() ?? "";
+            set => DirectorComboBox.SelectedValue = value;
         }
 
         public int? ManufacturerId { get; set; }

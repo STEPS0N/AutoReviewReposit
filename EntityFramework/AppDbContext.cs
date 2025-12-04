@@ -19,7 +19,6 @@ namespace AutoReview.EntityFramework
         public DbSet<Manufacturer> Manufacturer { get; set; }
         public DbSet<Engine> Engine { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
-        public DbSet<Feedback> Feedback { get; set; }
         public AppDbContext() => Database.EnsureCreated();
 
         public string connectionPath;
@@ -54,6 +53,15 @@ namespace AutoReview.EntityFramework
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("country_brand");
+                entity.Property(e => e.Director_Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("director_email");
+
+                entity.HasOne(m => m.Director)
+                      .WithMany(u => u.ManagedManufacturers)
+                      .HasForeignKey(m => m.Director_Email)
+                      .HasPrincipalKey(u => u.Email_User)
+                      .IsRequired(false);
             });
 
             modelBuilder.Entity<Engine>(entity =>
@@ -79,7 +87,8 @@ namespace AutoReview.EntityFramework
                 entity.ToTable("Car");
                 entity.HasKey(e => e.Id_Car);
                 entity.Property(e => e.Id_Car)
-                    .HasColumnName("id_car");
+                    .HasColumnName("id_car")
+                    .ValueGeneratedOnAdd();
                 entity.Property(e => e.Model_Car)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -95,7 +104,6 @@ namespace AutoReview.EntityFramework
                     .IsRequired()
                     .HasColumnName("year_release");
 
-                // Внешний ключ
                 entity.Property(e => e.Manufacturer_Id)
                     .HasColumnName("id_manufacturer");
                 entity.Property(e => e.Engine_Id)
@@ -126,7 +134,6 @@ namespace AutoReview.EntityFramework
                     .HasMaxLength(50)
                     .HasColumnName("equipment_level");
 
-                // Внешний ключ
                 entity.Property(e => e.Car_Id)
                     .HasColumnName("id_car");
 
@@ -155,44 +162,14 @@ namespace AutoReview.EntityFramework
                     .HasMaxLength(50)
                     .HasColumnName("email_user");
                 entity.HasIndex(e => e.Email_User).IsUnique();
+                entity.Property(e => e.Type_Right)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasDefaultValue("Пользователь")
+                    .HasColumnName("type_right");
                 entity.Property(e => e.Date_Registration)
-                    .HasDefaultValueSql("GETDATE()")
+                    .HasDefaultValueSql("CURRENT_DATE")
                     .HasColumnName("date_registration");
-            });
-
-            modelBuilder.Entity<Feedback>(entity =>
-            {
-                entity.ToTable("Feedback");
-                entity.HasKey(e => e.Id_Feedback);
-                entity.Property(e => e.Id_Feedback)
-                    .HasColumnName("id_feedback");
-                entity.Property(e => e.Review_Feedback)
-                    .IsRequired()
-                    .HasColumnName("review_feedback");
-                entity.Property(e => e.Rating_Feedback)
-                    .IsRequired()
-                    .HasColumnName("rating_feedback");
-                entity.Property(e => e.Date_Feedback)
-                    .HasDefaultValueSql("GETDATE()")
-                    .HasColumnName("date_feedback");
-
-                entity.Property(e => e.User_Id)
-                    .HasColumnName("id_user");
-                entity.Property(e => e.Car_Id)
-                    .HasColumnName("id_car");
-
-                // Внешний ключ
-                entity.HasOne(f => f.User)
-                      .WithMany(u => u.Feedbacks)
-                      .HasForeignKey(f => f.User_Id)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(f => f.Car)
-                      .WithMany(c => c.Feedbacks)
-                      .HasForeignKey(f => f.Car_Id)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.ToTable(tb => tb.HasCheckConstraint("CHK_Feedback_Rating", "rating_feedback BETWEEN 1 AND 5"));
             });
         }
     }

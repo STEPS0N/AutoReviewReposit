@@ -21,12 +21,10 @@ namespace AutoReview.Classes
         public virtual Engine Engine { get; set; }
 
         public virtual ICollection<Equipment> Equipments { get; set; }
-        public virtual ICollection<Feedback> Feedbacks { get; set; }
 
         public Car()
         {
             Equipments = new List<Equipment>();
-            Feedbacks = new List<Feedback>();
         }
     }
 }

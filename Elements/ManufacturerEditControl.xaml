@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoReview.Elements"
              mc:Ignorable="d" 
-             d:DesignHeight="241.275" d:DesignWidth="338.095">
+             d:DesignHeight="282.608" d:DesignWidth="341.428">
     <UserControl.Resources>
         <Style TargetType="Button">
             <Setter Property="Width" Value="100"/>
@@ -46,24 +46,32 @@
                 <TextBox x:Name="TitleBox" MaxLength="30"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="2">
+            <StackPanel Grid.Row="1">
                 <TextBlock Text="Страна производителя:"/>
                 <TextBox x:Name="CountryBox" MaxLength="50"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="3" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom">
-                <Button Content="Сохранить" 
-                    Click="SaveButton_Click"
-                    Background="#27AE60"
-                    Foreground="White"/>
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Директор (email):"/>
+                <ComboBox x:Name="DirectorComboBox" 
+                          DisplayMemberPath="Email_User"
+                          SelectedValuePath="Email_User"
+                          Margin="0,0,0,10"/>
+            </StackPanel>
 
-                <Button Content="Отмена" 
-                    Click="CancelButton_Click"
-                    Background="#E74C3C"
-                    Foreground="White"/>
+            <StackPanel Grid.Row="3" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom">
+                <Button Content="Сохранить" 
+                        Click="SaveButton_Click"
+                        Background="#27AE60"
+                        Foreground="White"/>
+
+                <Button Content="Отмена"
+                        Click="CancelButton_Click"
+                        Background="#E74C3C"
+                        Foreground="White"/>
             </StackPanel>
         </Grid>
     </Border>

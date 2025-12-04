@@ -5,8 +5,84 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoReview.Elements"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="306.859" d:DesignWidth="443.738">
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#34495E" CornerRadius="10" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Логин -->
+            <StackPanel Grid.Row="0">
+                <TextBlock Text="Логин:"/>
+                <TextBox x:Name="LoginBox" MaxLength="50"/>
+            </StackPanel>
+
+            <!-- Пароль -->
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="Пароль:"/>
+                <PasswordBox x:Name="PasswordBox"/>
+            </StackPanel>
+
+            <!-- Email -->
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Email:"/>
+                <TextBox x:Name="EmailBox" MaxLength="50"/>
+            </StackPanel>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom">
+                <Button Content="Сохранить" 
+                    Click="SaveButton_Click"
+                    Background="#27AE60"
+                    Foreground="White"/>
+
+                <Button Content="Отмена" 
+                    Click="CancelButton_Click"
+                    Background="#E74C3C"
+                    Foreground="White"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>

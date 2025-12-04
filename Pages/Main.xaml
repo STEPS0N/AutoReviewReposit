@@ -51,32 +51,36 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10" Grid.ColumnSpan="2">
             <Border>
                 <DataGrid x:Name="carsList"
-                          Background="White"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="False"
-                          HeadersVisibility="Column"
-                          BorderThickness="0">
+                  Background="White"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  BorderThickness="0">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Марка" 
-                                            Binding="{Binding BrandCar}"
-                                            Width="200"/>
-                        
+                                    Binding="{Binding Manufacturer.Title_Brand}"
+                                    Width="200"/>
+
                         <DataGridTextColumn Header="Модель" 
-                                            Binding="{Binding ModelCar}" 
-                                            Width="200"/>
+                                    Binding="{Binding Model_Car}" 
+                                    Width="200"/>
 
                         <DataGridTextColumn Header="Год" 
-                                            Binding="{Binding YearRelease}" 
-                                            Width="100"/>
+                                    Binding="{Binding Year_Release}" 
+                                    Width="100"/>
 
                         <DataGridTextColumn Header="Тип кузова" 
-                                            Binding="{Binding BodyType}" 
-                                            Width="150"/>
+                                    Binding="{Binding Body_Type}" 
+                                    Width="150"/>
+
+                        <DataGridTextColumn Header="Двигатель"
+                                    Binding="{Binding Engine.Type_Engine}" 
+                                    Width="150"/>
 
                         <DataGridTextColumn Header="Цена" 
-                                            Binding="{Binding PriceCar, StringFormat='{}₽{0:N0}'}" 
-                                            Width="155"/>
+                                    Binding="{Binding Price_Car, StringFormat='{}₽{0:N0}'}" 
+                                    Width="155"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

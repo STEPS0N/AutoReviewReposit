@@ -49,12 +49,16 @@ namespace AutoReview.Pages
                 ManufacturerId = null
             };
 
+            var users = context.Users.ToList();
+            editControl.LoadUsers(users);
+
             editControl.OnSave += (control) =>
             {
                 var manufacturer = new Classes.Manufacturer
                 {
                     Title_Brand = control.ManufacturerTitle,
-                    Country_Brand = control.ManufacturerCountry
+                    Country_Brand = control.ManufacturerCountry,
+                    Director_Email = control.DirectorEmail
                 };
 
                 context.Manufacturer.Add(manufacturer);
@@ -92,6 +96,9 @@ namespace AutoReview.Pages
                     ManufacturerId = selected.Id_Manufacturer
                 };
 
+                var users = context.Users.ToList();
+                editControl.LoadUsers(users);
+
                 editControl.OnSave += (control) =>
                 {
                     var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
@@ -100,6 +107,7 @@ namespace AutoReview.Pages
                     {
                         manufacturer.Title_Brand = control.ManufacturerTitle;
                         manufacturer.Country_Brand = control.ManufacturerCountry;
+                        manufacturer.Director_Email = control.DirectorEmail;
 
                         context.SaveChanges();
                         MessageBox.Show("Производитель обновлен!");

@@ -12,13 +12,15 @@ namespace AutoReview.Classes
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email_User { get; set; }
+        public string Type_Right { get; set; }
         public DateTime Date_Registration { get; set; }
 
-        public virtual ICollection<Feedback> Feedbacks { get; set; }
+        public virtual ICollection<Manufacturer> ManagedManufacturers { get; set; }
 
         public User()
         {
-            Feedbacks = new List<Feedback>();
+            Type_Right = "Пользователь";
+            ManagedManufacturers = new List<Manufacturer>();
         }
     }
 }

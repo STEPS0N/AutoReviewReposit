@@ -60,10 +60,7 @@
                         Click="Equipment_Click"/>
 
                     <Button x:Name="btnUsers" Content="Пользователи" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
-                        Click="Users_Click" />
-
-                    <Button x:Name="btnFeedback" Content="Отзывы" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
-                        Click="Feedback_Click"/>
+                        Click="Users_Click"/>
                 </StackPanel>
             </StackPanel>
         </Border>
