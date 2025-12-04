@@ -1,4 +1,8 @@
-﻿using Microsoft.VisualBasic;
+﻿using AutoReview.Classes;
+using AutoReview.Elements;
+using AutoReview.EntityFramework;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,36 +26,148 @@ namespace AutoReview.Pages
     public partial class Main : Page
     {
         public MainWindow mainWindow;
+        private AppDbContext context;
 
         public Main(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
+            context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            LoadData();
         }
 
-        private void Search_car(object sender, RoutedEventArgs e)
+        private void LoadData()
         {
+            try
+            {
+                var cars = context.Car
+                    .Include(c => c.Manufacturer)
+                    .Include(c => c.Engine)
+                    .ToList();
 
+                carsList.ItemsSource = cars;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}");
+            }
+        }
+
+        private void AddCar(object sender, RoutedEventArgs e)
+        {
+            var window = new Window
+            {
+                Title = "Добавить авто",
+                Width = 400,
+                Height = 500,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+
+            var editControl = new CarEditControl();
+
+            var manufacturers = context.Manufacturer.ToList();
+            var engines = context.Engine.ToList();
+
+            editControl.SetData(manufacturers, engines);
+
+            editControl.OnSave += (control) =>
+            {
+                var car = new Car
+                {
+                    Model_Car = control.Model,
+                    Year_Release = int.Parse(control.Year),
+                    Body_Type = control.BodyType,
+                    Price_Car = decimal.Parse(control.Price),
+                    Manufacturer_Id = control.ManufacturerId ?? 0,
+                    Engine_Id = control.EngineId ?? 0
+                };
+
+                context.Car.Add(car);
+                context.SaveChanges();
+
+                MessageBox.Show("Авто добавлено!");
+                window.Close();
+                LoadData();
+            };
+
+            editControl.OnCancel += () => window.Close();
+            window.Content = editControl;
+            window.ShowDialog();
+        }
+
+        private void EditCar(object sender, RoutedEventArgs e)
+        {
+            if (carsList.SelectedItem is Car selectedCar)
+            {
+                var window = new Window
+                {
+                    Title = "Редактировать авто",
+                    Width = 400,
+                    Height = 500,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen
+                };
+
+                var editControl = new CarEditControl();
+
+                var manufacturers = context.Manufacturer.ToList();
+                var engines = context.Engine.ToList();
+
+                editControl.SetData(manufacturers, engines, selectedCar);
+
+                editControl.OnSave += (control) =>
+                {
+                    var car = context.Car.Find(selectedCar.Id_Car);
+                    if (car != null)
+                    {
+                        car.Model_Car = control.Model;
+                        car.Year_Release = int.Parse(control.Year);
+                        car.Body_Type = control.BodyType;
+                        car.Price_Car = decimal.Parse(control.Price);
+                        car.Manufacturer_Id = control.ManufacturerId ?? 0;
+                        car.Engine_Id = control.EngineId ?? 0;
+
+                        context.SaveChanges();
+                        MessageBox.Show("Авто обновлено!");
+                        window.Close();
+                        LoadData();
+                    }
+                };
+
+                editControl.OnCancel += () => window.Close();
+                window.Content = editControl;
+                window.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Выберите авто!");
+            }
+        }
+
+        private void DeleteCar(object sender, RoutedEventArgs e)
+        {
+            if (carsList.SelectedItem is Car selectedCar)
+            {
+                if (MessageBox.Show($"Удалить {selectedCar.Model_Car}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    var car = context.Car.Find(selectedCar.Id_Car);
+                    if (car != null)
+                    {
+                        context.Car.Remove(car);
+                        context.SaveChanges();
+                        MessageBox.Show("Авто удалено!");
+                        LoadData();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите авто!");
+            }
         }
 
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
-        }
-
-        private void AddCar(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void EditCar(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DeleteCar(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

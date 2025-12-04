@@ -22,28 +22,16 @@ namespace AutoReview.Elements
         public event Action<CarEditControl> OnSave;
         public event Action OnCancel;
 
-        public List<Manufacturer> Manufacturers { get; set; }
-        public List<Engine> Engines { get; set; }
-
-        public Manufacturer SelectedManufacturer { get; set; }
-        public Engine SelectedEngine { get; set; }
-
         public CarEditControl()
         {
             InitializeComponent();
         }
 
-        // Метод для загрузки данных в контрол
-        public void LoadData(List<Manufacturer> manufacturers, List<Engine> engines, Car car = null)
+        public void SetData(List<Manufacturer> manufacturers, List<Engine> engines, Car car = null)
         {
-            Manufacturers = manufacturers;
-            Engines = engines;
-
             ManufacturerBox.ItemsSource = manufacturers;
-            ManufacturerBox.DisplayMemberPath = "Title_Brand";
 
             EngineBox.ItemsSource = engines;
-            EngineBox.DisplayMemberPath = "Type_Engine";
 
             if (car != null)
             {
@@ -51,23 +39,9 @@ namespace AutoReview.Elements
                 YearBox.Text = car.Year_Release.ToString();
                 PriceBox.Text = car.Price_Car.ToString();
 
-                foreach (Manufacturer manufacture in ManufacturerBox.Items)
-                {
-                    if (manufacture.Id_Manufacturer == car.Manufacturer_Id)
-                    {
-                        ManufacturerBox.SelectedItem = manufacture;
-                        break;
-                    }
-                }
+                ManufacturerBox.SelectedValue = car.Manufacturer_Id;
 
-                foreach (Engine engine in EngineBox.Items)
-                {
-                    if (engine.Id_Engine == car.Engine_Id)
-                    {
-                        EngineBox.SelectedItem = engine;
-                        break;
-                    }
-                }
+                EngineBox.SelectedValue = car.Engine_Id;
 
                 foreach (ComboBoxItem item in BodyTypeBox.Items)
                 {
@@ -80,52 +54,46 @@ namespace AutoReview.Elements
             }
         }
 
-        public Car GetCarData()
-        {
-            return new Car
-            {
-                Model_Car = ModelBox.Text,
-                Year_Release = int.Parse(YearBox.Text),
-                Body_Type = BodyTypeBox.Text,
-                Price_Car = decimal.Parse(PriceBox.Text),
-                Manufacturer = ManufacturerBox.SelectedItem as Manufacturer,
-                Engine = EngineBox.SelectedItem as Engine
-            };
-        }
+        public string Model => ModelBox.Text;
+        public string Year => YearBox.Text;
+        public string BodyType => BodyTypeBox.Text;
+        public string Price => PriceBox.Text;
+        public int? ManufacturerId => ManufacturerBox.SelectedValue as int?;
+        public int? EngineId => EngineBox.SelectedValue as int?;
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ManufacturerBox.SelectedItem == null)
+            if (ManufacturerBox.SelectedValue == null)
             {
                 MessageBox.Show("Выберите производителя!");
                 return;
             }
 
-            if (string.IsNullOrEmpty(ModelBox.Text))
+            if (string.IsNullOrEmpty(Model))
             {
                 MessageBox.Show("Введите модель!");
                 return;
             }
 
-            if (!int.TryParse(YearBox.Text, out int year) || year < 1990)
+            if (!int.TryParse(Year, out int year) || year < 1990)
             {
                 MessageBox.Show("Введите корректный год!");
                 return;
             }
 
-            if (string.IsNullOrEmpty(BodyTypeBox.Text))
+            if (string.IsNullOrEmpty(BodyType))
             {
                 MessageBox.Show("Выберите тип кузова!");
                 return;
             }
 
-            if (EngineBox.SelectedItem == null)
+            if (EngineBox.SelectedValue == null)
             {
                 MessageBox.Show("Выберите двигатель!");
                 return;
             }
 
-            if (!decimal.TryParse(PriceBox.Text, out decimal price) || price <= 0)
+            if (!decimal.TryParse(Price, out decimal price) || price <= 0)
             {
                 MessageBox.Show("Введите корректную цену!");
                 return;
