@@ -28,27 +28,22 @@ namespace AutoReview.Pages
             mainWindow = _mainWindow;
         }
 
-        private void Search_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void BackMenu(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void AddUser(object sender, RoutedEventArgs e)
+        private void AddEngine(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void EditUser(object sender, RoutedEventArgs e)
+        private void EditEngine(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void DeleteUser(object sender, RoutedEventArgs e)
+        private void DeleteEngine(object sender, RoutedEventArgs e)
         {
 
         }
