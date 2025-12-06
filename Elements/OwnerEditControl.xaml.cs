@@ -60,6 +60,24 @@ namespace AutoReview.Elements
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(OwnerPhone))
+            {
+                MessageBox.Show("Введите телефон владельца!");
+                return;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(OwnerEmail, @"^[A-Za-z0-9][A-Za-z0-9._%+-]+@[^@\s]+\.ru+$"))
+            {
+                MessageBox.Show("Неверный формат email! \n Пример: permaviat@permaviat.ru");
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(OwnerPhone) && !System.Text.RegularExpressions.Regex.IsMatch(OwnerPhone, @"^\+[1-9]\d{2,11}$"))
+            {
+                MessageBox.Show("Неверный формат телефона! \n Должно начинаться с '+' и содержать от 3 до 12 цифр. \n Пример: +79128887054");
+                return;
+            }
+
             OnSave?.Invoke(this);
         }
 

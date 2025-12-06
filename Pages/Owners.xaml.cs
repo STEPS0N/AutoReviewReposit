@@ -47,7 +47,7 @@ namespace AutoReview.Pages
                 {
                     Title = "Добавить владельца",
                     Width = 400,
-                    Height = 250,
+                    Height = 300,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     ResizeMode = ResizeMode.NoResize
                 };
