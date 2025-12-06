@@ -43,7 +43,7 @@ namespace AutoReview.Pages
                 {
                     Title = "Добавить производителя",
                     Width = 400,
-                    Height = 300,
+                    Height = 250,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     ResizeMode = ResizeMode.NoResize
                 };
@@ -55,8 +55,8 @@ namespace AutoReview.Pages
                     ManufacturerId = null
                 };
 
-                var users = context.Users.ToList();
-                editControl.LoadUsers(users);
+                var owners = context.Owners.ToList();
+                editControl.LoadOwners(owners);
 
                 editControl.OnSave += (control) =>
                 {
@@ -64,20 +64,18 @@ namespace AutoReview.Pages
                     {
                         Title_Brand = control.ManufacturerTitle,
                         Country_Brand = control.ManufacturerCountry,
-                        Director_Email = control.DirectorEmail
+                        Id_owner = control.OwnerId
                     };
 
                     context.Manufacturer.Add(manufacturer);
                     context.SaveChanges();
 
                     MessageBox.Show($"Производитель {manufacturer.Title_Brand} успешно добавлен!");
-
                     window.Close();
                     LoadData();
                 };
 
                 editControl.OnCancel += () => window.Close();
-
                 window.Content = editControl;
                 window.ShowDialog();
             }
@@ -97,7 +95,7 @@ namespace AutoReview.Pages
                     {
                         Title = "Редактировать производителя",
                         Width = 400,
-                        Height = 300,
+                        Height = 250,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         ResizeMode = ResizeMode.NoResize
                     };
@@ -106,25 +104,25 @@ namespace AutoReview.Pages
                     {
                         ManufacturerTitle = selected.Title_Brand,
                         ManufacturerCountry = selected.Country_Brand,
-                        ManufacturerId = selected.Id_Manufacturer
+                        ManufacturerId = selected.Id_Manufacturer,
+                        OwnerId = selected.Id_owner
                     };
 
-                    var users = context.Users.ToList();
-                    editControl.LoadUsers(users);
+                    var owners = context.Owners.ToList();
+                    editControl.LoadOwners(owners);
 
                     editControl.OnSave += (control) =>
                     {
                         var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
-                        
+
                         if (manufacturer != null)
                         {
                             manufacturer.Title_Brand = control.ManufacturerTitle;
                             manufacturer.Country_Brand = control.ManufacturerCountry;
-                            manufacturer.Director_Email = control.DirectorEmail;
+                            manufacturer.Id_owner = control.OwnerId;
 
                             context.SaveChanges();
                             MessageBox.Show("Производитель обновлен!");
-
                             window.Close();
                             LoadData();
                         }
@@ -166,7 +164,7 @@ namespace AutoReview.Pages
                 }
                 else
                 {
-                    MessageBox.Show("Выберите производителя для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Выберите производителя для удаления!");
                 }
             }
             else

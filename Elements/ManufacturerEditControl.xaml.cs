@@ -1,4 +1,5 @@
 ﻿using AutoReview.Classes;
+using AutoReview.Pages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,17 +23,19 @@ namespace AutoReview.Elements
         public event Action<ManufacturerEditControl> OnSave;
         public event Action OnCancel;
 
-        public List<User> Users { get; set; }
+        public List<Owner> Owners { get; set; }
 
         public ManufacturerEditControl()
         {
             InitializeComponent();
         }
 
-        public void LoadUsers(List<User> users)
+        public void LoadOwners(List<Owner> owners)
         {
-            Users = users;
-            DirectorComboBox.ItemsSource = users;
+            Owners = owners;
+            OwnerComboBox.ItemsSource = owners;
+            OwnerComboBox.DisplayMemberPath = "Fio";
+            OwnerComboBox.SelectedValuePath = "Id_owner";
         }
 
         public string ManufacturerTitle
@@ -47,10 +50,10 @@ namespace AutoReview.Elements
             set => CountryBox.Text = value;
         }
 
-        public string DirectorEmail
+        public int OwnerId
         {
-            get => DirectorComboBox.SelectedValue?.ToString() ?? "";
-            set => DirectorComboBox.SelectedValue = value;
+            get => OwnerComboBox.SelectedValue != null ? (int)OwnerComboBox.SelectedValue : 0;
+            set => OwnerComboBox.SelectedValue = value;
         }
 
         public int? ManufacturerId { get; set; }
@@ -66,6 +69,12 @@ namespace AutoReview.Elements
             if (string.IsNullOrWhiteSpace(ManufacturerCountry))
             {
                 MessageBox.Show("Введите страну производителя!");
+                return;
+            }
+
+            if (OwnerId == 0)
+            {
+                MessageBox.Show("Выберите владельца!");
                 return;
             }
 

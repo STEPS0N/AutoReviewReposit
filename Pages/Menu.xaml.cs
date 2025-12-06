@@ -49,16 +49,9 @@ namespace AutoReview.Pages
             mainWindow.OpenPage(MainWindow.pages.equipment);
         }
 
-        private void Users_Click(object sender, RoutedEventArgs e)
+        private void Owners_Click(object sender, RoutedEventArgs e)
         {
-            if (AuthData.Rights)
-            {
-                mainWindow.OpenPage(MainWindow.pages.users);
-            }
-            else
-            {
-                MessageBox.Show("Пользователь не может просматривать других пользователей!");
-            }
+            mainWindow.OpenPage(MainWindow.pages.owners);
         }
 
         private void Back(object sender, RoutedEventArgs e)

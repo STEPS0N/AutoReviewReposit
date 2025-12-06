@@ -33,7 +33,7 @@ namespace AutoReview
             manufacturer,
             engine,
             equipment,
-            users
+            owners
         };
 
         public void OpenPage(pages _pages)
@@ -50,8 +50,8 @@ namespace AutoReview
                 frame.Navigate(new Pages.Engine(this));
             if (_pages == pages.equipment)
                 frame.Navigate(new Pages.Equipment(this));
-            if (_pages == pages.users)
-                frame.Navigate(new Pages.Users(this));
+            if (_pages == pages.owners)
+                frame.Navigate(new Pages.Owners(this));
         }
     }
 }

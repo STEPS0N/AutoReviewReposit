@@ -52,10 +52,8 @@
             </StackPanel>
 
             <StackPanel Grid.Row="2">
-                <TextBlock Text="Директор (email):"/>
-                <ComboBox x:Name="DirectorComboBox" 
-                          DisplayMemberPath="Email_User"
-                          SelectedValuePath="Email_User"
+                <TextBlock Text="Владелец компании:"/>
+                <ComboBox x:Name="OwnerComboBox"
                           Margin="0,0,0,10"/>
             </StackPanel>
 

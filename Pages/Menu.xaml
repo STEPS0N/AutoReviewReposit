@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AutoReview.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800" MinWidth="800" MinHeight="450"
-      Title="Menu">
+      Title="Меню">
 
     <Page.Resources>
         <Style TargetType="Button">
@@ -59,8 +59,8 @@
                     <Button x:Name="btnEquipment" Content="Комплектации" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
                         Click="Equipment_Click"/>
 
-                    <Button x:Name="btnUsers" Content="Пользователи" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
-                        Click="Users_Click"/>
+                    <Button x:Name="btnUsers" Content="Владельцы" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
+                        Click="Owners_Click"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Bottom">
                     <Button Content="Выход" FontFamily="Montserrat" Height="35"

@@ -35,50 +35,56 @@ namespace AutoReview.Pages
             string login = tb_login.Text;
             string password = tb_password.Password;
 
-            using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={login};password={password};"))
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
-                context.Database.OpenConnection();
+                MessageBox.Show("Введите логин и пароль!");
+                return;
+            }
 
-                try
+            try
+            {
+                using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={login};password={password};"))
                 {
-                    using var cmd = context.Database.GetDbConnection().CreateCommand();
-                    cmd.CommandText = "SELECT Grant_priv FROM mysql.user WHERE User = @login";
-
-                    var param = cmd.CreateParameter();
-                    param.ParameterName = "@login";
-                    param.Value = login;
-                    cmd.Parameters.Add(param);
-
-                    var result = cmd.ExecuteScalar()?.ToString();
-
-                    if (result == "Y")
+                    try
                     {
-                        AuthData.Rights = true;
-                        MessageBox.Show("Здравствуйте админ!");
-                        mainWindow.OpenPage(MainWindow.pages.menu);
-                    }
-                    else if (result == "N")
-                    {
-                        AuthData.Rights = false;
-                        MessageBox.Show("Здравствуйте пользователь!");
-                        mainWindow.OpenPage(MainWindow.pages.menu);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Пользователь не найден в mysql.user");
-                    }
+                        context.Database.OpenConnection();
 
-                    AuthData.Login = login;
-                    AuthData.Password = password;
+                        using var cmd = context.Database.GetDbConnection().CreateCommand();
+                        cmd.CommandText = "SELECT Grant_priv FROM mysql.user WHERE User = @login";
+
+                        var param = cmd.CreateParameter();
+                        param.ParameterName = "@login";
+                        param.Value = login;
+                        cmd.Parameters.Add(param);
+
+                        var result = cmd.ExecuteScalar()?.ToString();
+
+                        if (result == "Y")
+                        {
+                            AuthData.Rights = true;
+                            MessageBox.Show("Здравствуйте админ!");
+                            mainWindow.OpenPage(MainWindow.pages.menu);
+                        }
+                        else if (result == "N")
+                        {
+                            AuthData.Rights = false;
+                            MessageBox.Show("Здравствуйте пользователь!");
+                            mainWindow.OpenPage(MainWindow.pages.menu);
+                        }
+
+                        AuthData.Login = login;
+                        AuthData.Password = password;
+                    }
+                    finally
+                    {
+                        context.Database.CloseConnection();
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
-                }
-                finally
-                {
-                    context.Database.CloseConnection();
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: Пользователь не найден! (Неправильный логин или пароль)");
+                return;
             }
         }
     }
@@ -93,40 +99,55 @@ namespace AutoReview.Pages
 //    string login = tb_login.Text;
 //    string password = tb_password.Text;
 
-//    using (AppDbContext context = new AppDbContext($"Server=ISP-23-1-7\\KLIM_MILN;Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+//    if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
 //    {
-//        context.Database.OpenConnection();
+//        MessageBox.Show("Введите логин и пароль!");
+//        return;
+//    }
 
-//        try
+//    try
+//    {
+//        using (AppDbContext context = new AppDbContext($"Server=ISP-23-1-7\\KLIM_MILN;Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
 //        {
-//            using var cmd = context.Database.GetDbConnection().CreateCommand();
-//            cmd.CommandText = $"SELECT IS_MEMBER('db_owner')";
-//            int result = (int)cmd.ExecuteScalar();
+//            context.Database.OpenConnection();
 
-//            if (result == 1)
+//            try
 //            {
-//                MessageBox.Show("Здравствуйте админ!");
-//                mainWindow.OpenPage(MainWindow.pages.menu);
-//            }
-//            else
-//            {
-//                AuthData.Rights = false;
-//                MessageBox.Show("Здравствуйте пользователь!");
-//                mainWindow.OpenPage(MainWindow.pages.menu);
-//            }
+//                using var cmd = context.Database.GetDbConnection().CreateCommand();
+//                cmd.CommandText = $"SELECT IS_MEMBER('db_owner')";
+//                int result = (int)cmd.ExecuteScalar();
 
-//            AuthData.Login = login;
-//            AuthData.Password = password;
-//        }
-//        catch (Exception ex)
-//        {
-//            MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
-//        }
-//        finally
-//        {
-//            context.Database.CloseConnection();
+//                if (result == 1)
+//                {
+//                    MessageBox.Show("Здравствуйте админ!");
+//                    mainWindow.OpenPage(MainWindow.pages.menu);
+//                }
+//                else
+//                {
+//                    AuthData.Rights = false;
+//                    MessageBox.Show("Здравствуйте пользователь!");
+//                    mainWindow.OpenPage(MainWindow.pages.menu);
+//                }
+
+//                AuthData.Login = login;
+//                AuthData.Password = password;
+//            }
+//            catch (Exception ex)
+//            {
+//                MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
+//            }
+//            finally
+//            {
+//                context.Database.CloseConnection();
+//            }
 //        }
 //    }
+//    catch (Exception ex)
+//    {
+//        MessageBox.Show($"Ошибка: Пользователь не найден! (Неправильный логин или пароль)");
+//        return;
+//    }
+
 //}
 
 

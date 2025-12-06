@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AutoReview.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Главная">
+      Title="Автомобили">
 
     <Page.Resources>
         <Style TargetType="Button">
@@ -37,7 +37,7 @@
             <StackPanel>
                 <Border Height="40" Background="#e1f6ef" CornerRadius="5">
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,4">
-                        <TextBlock Text="Авто" 
+                        <TextBlock Text="Автомобили" 
                                 Foreground="#2C3E50" 
                                 FontSize="18" 
                                 FontWeight="Bold"

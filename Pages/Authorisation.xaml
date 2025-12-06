@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AutoReview.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Authorisation">
+      Title="Авторизация">
 
     <Page.Resources>
         <Style TargetType="Button">
