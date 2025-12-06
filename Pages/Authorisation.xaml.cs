@@ -1,4 +1,5 @@
-﻿using AutoReview.Classes;
+﻿using AutoReview;
+using AutoReview.Classes;
 using AutoReview.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -52,11 +53,13 @@ namespace AutoReview.Pages
 
                     if (result == "Y")
                     {
+                        AuthData.Rights = true;
                         MessageBox.Show("Здравствуйте админ!");
                         mainWindow.OpenPage(MainWindow.pages.menu);
                     }
                     else if (result == "N")
                     {
+                        AuthData.Rights = false;
                         MessageBox.Show("Здравствуйте пользователь!");
                         mainWindow.OpenPage(MainWindow.pages.menu);
                     }
@@ -107,8 +110,60 @@ namespace AutoReview.Pages
 //            }
 //            else
 //            {
+//                AuthData.Rights = false;
 //                MessageBox.Show("Здравствуйте пользователь!");
 //                mainWindow.OpenPage(MainWindow.pages.menu);
+//            }
+
+//            AuthData.Login = login;
+//            AuthData.Password = password;
+//        }
+//        catch (Exception ex)
+//        {
+//            MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
+//        }
+//        finally
+//        {
+//            context.Database.CloseConnection();
+//        }
+//    }
+//}
+
+
+//private void Entry(object sender, RoutedEventArgs e)
+//{
+//    string login = tb_login.Text;
+//    string password = tb_password.Password;
+
+//    using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={login};password={password};"))
+//    {
+//        context.Database.OpenConnection();
+
+//        try
+//        {
+//            using var cmd = context.Database.GetDbConnection().CreateCommand();
+//            cmd.CommandText = "SELECT Grant_priv FROM mysql.user WHERE User = @login";
+
+//            var param = cmd.CreateParameter();
+//            param.ParameterName = "@login";
+//            param.Value = login;
+//            cmd.Parameters.Add(param);
+
+//            var result = cmd.ExecuteScalar()?.ToString();
+
+//            if (result == "Y")
+//            {
+//                MessageBox.Show("Здравствуйте админ!");
+//                mainWindow.OpenPage(MainWindow.pages.menu);
+//            }
+//            else if (result == "N")
+//            {
+//                MessageBox.Show("Здравствуйте пользователь!");
+//                mainWindow.OpenPage(MainWindow.pages.menu);
+//            }
+//            else
+//            {
+//                MessageBox.Show("Пользователь не найден в mysql.user");
 //            }
 
 //            AuthData.Login = login;

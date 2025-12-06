@@ -23,6 +23,10 @@ namespace AutoReview.Pages
             InitializeComponent();
             mainWindow = _mainWindow;
             context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            if (AuthData.Rights == false)
+            {
+                id.Visibility = Visibility.Collapsed;
+            }
             LoadData();
         }
 
@@ -33,56 +37,11 @@ namespace AutoReview.Pages
 
         private void AddManufacture(object sender, RoutedEventArgs e)
         {
-            var window = new Window
-            {
-                Title = "Добавить производителя",
-                Width = 400,
-                Height = 300,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ResizeMode = ResizeMode.NoResize
-            };
-
-            var editControl = new ManufacturerEditControl
-            {
-                ManufacturerTitle = "",
-                ManufacturerCountry = "",
-                ManufacturerId = null
-            };
-
-            var users = context.Users.ToList();
-            editControl.LoadUsers(users);
-
-            editControl.OnSave += (control) =>
-            {
-                var manufacturer = new Classes.Manufacturer
-                {
-                    Title_Brand = control.ManufacturerTitle,
-                    Country_Brand = control.ManufacturerCountry,
-                    Director_Email = control.DirectorEmail
-                };
-
-                context.Manufacturer.Add(manufacturer);
-                context.SaveChanges();
-
-                MessageBox.Show($"Производитель {manufacturer.Title_Brand} успешно добавлен!");
-
-                window.Close();
-                LoadData();
-            };
-
-            editControl.OnCancel += () => window.Close();
-
-            window.Content = editControl;
-            window.ShowDialog();
-        }
-
-        private void EditManufacture(object sender, RoutedEventArgs e)
-        {
-            if (manufacturersList.SelectedItem is Classes.Manufacturer selected)
+            if (AuthData.Rights)
             {
                 var window = new Window
                 {
-                    Title = "Редактировать производителя",
+                    Title = "Добавить производителя",
                     Width = 400,
                     Height = 300,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -91,9 +50,9 @@ namespace AutoReview.Pages
 
                 var editControl = new ManufacturerEditControl
                 {
-                    ManufacturerTitle = selected.Title_Brand,
-                    ManufacturerCountry = selected.Country_Brand,
-                    ManufacturerId = selected.Id_Manufacturer
+                    ManufacturerTitle = "",
+                    ManufacturerCountry = "",
+                    ManufacturerId = null
                 };
 
                 var users = context.Users.ToList();
@@ -101,53 +60,118 @@ namespace AutoReview.Pages
 
                 editControl.OnSave += (control) =>
                 {
-                    var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
-                    
-                    if (manufacturer != null)
+                    var manufacturer = new Classes.Manufacturer
                     {
-                        manufacturer.Title_Brand = control.ManufacturerTitle;
-                        manufacturer.Country_Brand = control.ManufacturerCountry;
-                        manufacturer.Director_Email = control.DirectorEmail;
+                        Title_Brand = control.ManufacturerTitle,
+                        Country_Brand = control.ManufacturerCountry,
+                        Director_Email = control.DirectorEmail
+                    };
 
-                        context.SaveChanges();
-                        MessageBox.Show("Производитель обновлен!");
+                    context.Manufacturer.Add(manufacturer);
+                    context.SaveChanges();
 
-                        window.Close();
-                        LoadData();
-                    }
+                    MessageBox.Show($"Производитель {manufacturer.Title_Brand} успешно добавлен!");
+
+                    window.Close();
+                    LoadData();
                 };
 
                 editControl.OnCancel += () => window.Close();
+
                 window.Content = editControl;
                 window.ShowDialog();
             }
             else
             {
-                MessageBox.Show("Выберите производителя для редактирования!");
+                MessageBox.Show("Вы не можете добавлять данные!");
+            }
+        }
+
+        private void EditManufacture(object sender, RoutedEventArgs e)
+        {
+            if (AuthData.Rights)
+            {
+                if (manufacturersList.SelectedItem is Classes.Manufacturer selected)
+                {
+                    var window = new Window
+                    {
+                        Title = "Редактировать производителя",
+                        Width = 400,
+                        Height = 300,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                        ResizeMode = ResizeMode.NoResize
+                    };
+
+                    var editControl = new ManufacturerEditControl
+                    {
+                        ManufacturerTitle = selected.Title_Brand,
+                        ManufacturerCountry = selected.Country_Brand,
+                        ManufacturerId = selected.Id_Manufacturer
+                    };
+
+                    var users = context.Users.ToList();
+                    editControl.LoadUsers(users);
+
+                    editControl.OnSave += (control) =>
+                    {
+                        var manufacturer = context.Manufacturer.Find(control.ManufacturerId);
+                        
+                        if (manufacturer != null)
+                        {
+                            manufacturer.Title_Brand = control.ManufacturerTitle;
+                            manufacturer.Country_Brand = control.ManufacturerCountry;
+                            manufacturer.Director_Email = control.DirectorEmail;
+
+                            context.SaveChanges();
+                            MessageBox.Show("Производитель обновлен!");
+
+                            window.Close();
+                            LoadData();
+                        }
+                    };
+
+                    editControl.OnCancel += () => window.Close();
+                    window.Content = editControl;
+                    window.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Выберите производителя для редактирования!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Вы не можете обновлять данные!");
             }
         }
 
         private void DeleteManufacture(object sender, RoutedEventArgs e)
         {
-            if (manufacturersList.SelectedItem is Classes.Manufacturer selected)
+            if (AuthData.Rights)
             {
-                if (MessageBox.Show($"Удалить производителя {selected.Title_Brand}?",
-                    "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (manufacturersList.SelectedItem is Classes.Manufacturer selected)
                 {
-                    var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
-                    
-                    if (manufacturer != null)
+                    if (MessageBox.Show($"Удалить производителя {selected.Title_Brand}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        context.Manufacturer.Remove(manufacturer);
-                        context.SaveChanges();
-                        MessageBox.Show("Производитель удален!");
-                        LoadData();
+                        var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+
+                        if (manufacturer != null)
+                        {
+                            context.Manufacturer.Remove(manufacturer);
+                            context.SaveChanges();
+                            MessageBox.Show("Производитель удален!");
+                            LoadData();
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Выберите производителя для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Выберите производителя для удаления!");
+                MessageBox.Show("Вы не можете удалять данные!");
             }
         }
 

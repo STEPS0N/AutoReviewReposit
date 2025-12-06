@@ -62,6 +62,10 @@
                     <Button x:Name="btnUsers" Content="Пользователи" Margin="0, 0, 0, 20" FontFamily="Montserrat" Height="35"
                         Click="Users_Click"/>
                 </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Bottom">
+                    <Button Content="Выход" FontFamily="Montserrat" Height="35"
+                         Click="Back" IsCancel="True" Width="70" Background="Red"/>
+                </StackPanel>
             </StackPanel>
         </Border>
     </Grid>

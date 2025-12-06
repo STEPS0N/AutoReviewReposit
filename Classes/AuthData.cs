@@ -8,5 +8,6 @@ namespace AutoReview.Classes
     {
         public static string Login { get; set; }
         public static string Password { get; set; }
+        public static bool Rights { get; set; } = true;
     }
 }

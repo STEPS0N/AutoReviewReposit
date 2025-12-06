@@ -55,6 +55,7 @@
                         FontSize="18"
                         FontFamily="Montserrat"/>
                     <TextBox
+                        Text="klimov"
                         Padding="5"
                         x:Name="tb_login"
                         Width="250"
@@ -74,10 +75,12 @@
                         Width="250"
                         Background="White"
                         FontSize="18"
-                        Height="40"/>
+                        Height="40"
+                        Password="klim2007"/>
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Button
+                        IsDefault="True"
                         Click="Entry"
                         Width="100"
                         Height="30"
@@ -85,8 +88,7 @@
                         FontFamily="Montserrat"
                         FontWeight="Bold"
                         VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center"
-                        Margin="0, 130, 0, 0"/>
+                        HorizontalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

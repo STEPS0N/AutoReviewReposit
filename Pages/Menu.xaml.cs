@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoReview.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +51,19 @@ namespace AutoReview.Pages
 
         private void Users_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.OpenPage(MainWindow.pages.users);
+            if (AuthData.Rights)
+            {
+                mainWindow.OpenPage(MainWindow.pages.users);
+            }
+            else
+            {
+                MessageBox.Show("Пользователь не может просматривать других пользователей!");
+            }
+        }
+
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            NavigationService.GoBack();
         }
     }
 }

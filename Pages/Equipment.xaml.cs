@@ -32,6 +32,10 @@ namespace AutoReview.Pages
             InitializeComponent();
             mainWindow = _mainWindow;
             context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            if (AuthData.Rights == false)
+            {
+                id.Visibility = Visibility.Collapsed;
+            }
             LoadData();
         }
 
@@ -54,7 +58,7 @@ namespace AutoReview.Pages
 
         private void AddEquipment(object sender, RoutedEventArgs e)
         {
-            try
+            if (AuthData.Rights)
             {
                 var window = new Window
                 {
@@ -92,81 +96,93 @@ namespace AutoReview.Pages
                 window.Content = editControl;
                 window.ShowDialog();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                MessageBox.Show("Вы не можете добавлять данные!");
             }
         }
 
         private void EditEquipment(object sender, RoutedEventArgs e)
         {
-            if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
+            if (AuthData.Rights)
             {
-
-                var window = new Window
+                if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
                 {
-                    Title = "Редактировать комплектацию",
-                    Width = 400,
-                    Height = 350,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    ResizeMode = ResizeMode.NoResize
-                };
-
-                var editControl = new EquipmentEditControl();
-                editControl.EquipmentId = selectedEquipment.Id_Equipment;
-
-                var cars = context.Car.ToList();
-                editControl.SetData(cars, selectedEquipment);
-
-                editControl.OnSave += (control) =>
-                {
-                    var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
-                    
-                    if (equipment != null)
+                    var window = new Window
                     {
-                        equipment.Title_Equipment = control.Title;
-                        equipment.Equipment_Level = control.Level;
-                        equipment.Car_Id = control.CarId ?? 0;
+                        Title = "Редактировать комплектацию",
+                        Width = 400,
+                        Height = 350,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                        ResizeMode = ResizeMode.NoResize
+                    };
 
-                        context.SaveChanges();
-                        MessageBox.Show("Комплектация обновлена!");
-                        window.Close();
-                        LoadData();
-                    }
-                };
+                    var editControl = new EquipmentEditControl();
+                    editControl.EquipmentId = selectedEquipment.Id_Equipment;
 
-                editControl.OnCancel += () => window.Close();
-                window.Content = editControl;
-                window.ShowDialog();
+                    var cars = context.Car.ToList();
+                    editControl.SetData(cars, selectedEquipment);
 
+                    editControl.OnSave += (control) =>
+                    {
+                        var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
+
+                        if (equipment != null)
+                        {
+                            equipment.Title_Equipment = control.Title;
+                            equipment.Equipment_Level = control.Level;
+                            equipment.Car_Id = control.CarId ?? 0;
+
+                            context.SaveChanges();
+                            MessageBox.Show("Комплектация обновлена!");
+                            window.Close();
+                            LoadData();
+                        }
+                    };
+
+                    editControl.OnCancel += () => window.Close();
+                    window.Content = editControl;
+                    window.ShowDialog();
+
+                }
+                else
+                {
+                    MessageBox.Show("Выберите комплектацию!");
+                }
             }
             else
             {
-                MessageBox.Show("Выберите комплектацию!");
+                MessageBox.Show("Вы не можете обновлять данные!");
             }
         }
 
         private void DeleteEquipment(object sender, RoutedEventArgs e)
         {
-            if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
+            if (AuthData.Rights)
             {
-                if (MessageBox.Show($"Удалить комплектацию '{selectedEquipment.Title_Equipment}'?",
-                    "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
                 {
-                    var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
-                    
-                    if (equipment != null)
+                    if (MessageBox.Show($"Удалить комплектацию '{selectedEquipment.Title_Equipment}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        context.Equipment.Remove(equipment);
-                        context.SaveChanges();
-                        MessageBox.Show("Комплектация удалена!");
-                        LoadData();
+                        var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
+
+                        if (equipment != null)
+                        {
+                            context.Equipment.Remove(equipment);
+                            context.SaveChanges();
+                            MessageBox.Show("Комплектация удалена!");
+                            LoadData();
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Выберите комплектацию для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Выберите комплектацию!");
+                MessageBox.Show("Вы не можете удалять данные!");
             }
         }
 

@@ -33,6 +33,11 @@ namespace AutoReview.Pages
             InitializeComponent();
             mainWindow = _mainWindow;
             context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            //context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            if (AuthData.Rights == false)
+            {
+                id.Visibility = Visibility.Collapsed;
+            }
             LoadData();
         }
 
@@ -55,56 +60,15 @@ namespace AutoReview.Pages
 
         private void AddCar(object sender, RoutedEventArgs e)
         {
-            var window = new Window
-            {
-                Title = "Добавить авто",
-                Width = 400,
-                Height = 500,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen
-            };
-
-            var editControl = new CarEditControl();
-
-            var manufacturers = context.Manufacturer.ToList();
-            var engines = context.Engine.ToList();
-
-            editControl.SetData(manufacturers, engines);
-
-            editControl.OnSave += (control) =>
-            {
-                var car = new Car
-                {
-                    Model_Car = control.Model,
-                    Year_Release = int.Parse(control.Year),
-                    Body_Type = control.BodyType,
-                    Price_Car = decimal.Parse(control.Price),
-                    Manufacturer_Id = control.ManufacturerId ?? 0,
-                    Engine_Id = control.EngineId ?? 0
-                };
-
-                context.Car.Add(car);
-                context.SaveChanges();
-
-                MessageBox.Show("Авто добавлено!");
-                window.Close();
-                LoadData();
-            };
-
-            editControl.OnCancel += () => window.Close();
-            window.Content = editControl;
-            window.ShowDialog();
-        }
-
-        private void EditCar(object sender, RoutedEventArgs e)
-        {
-            if (carsList.SelectedItem is Car selectedCar)
+            if (AuthData.Rights)
             {
                 var window = new Window
                 {
-                    Title = "Редактировать авто",
+                    Title = "Добавить авто",
                     Width = 400,
                     Height = 500,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    ResizeMode = ResizeMode.NoResize
                 };
 
                 var editControl = new CarEditControl();
@@ -112,25 +76,26 @@ namespace AutoReview.Pages
                 var manufacturers = context.Manufacturer.ToList();
                 var engines = context.Engine.ToList();
 
-                editControl.SetData(manufacturers, engines, selectedCar);
+                editControl.SetData(manufacturers, engines);
 
                 editControl.OnSave += (control) =>
                 {
-                    var car = context.Car.Find(selectedCar.Id_Car);
-                    if (car != null)
+                    var car = new Car
                     {
-                        car.Model_Car = control.Model;
-                        car.Year_Release = int.Parse(control.Year);
-                        car.Body_Type = control.BodyType;
-                        car.Price_Car = decimal.Parse(control.Price);
-                        car.Manufacturer_Id = control.ManufacturerId ?? 0;
-                        car.Engine_Id = control.EngineId ?? 0;
+                        Model_Car = control.Model,
+                        Year_Release = int.Parse(control.Year),
+                        Body_Type = control.BodyType,
+                        Price_Car = decimal.Parse(control.Price),
+                        Manufacturer_Id = control.ManufacturerId ?? 0,
+                        Engine_Id = control.EngineId ?? 0
+                    };
 
-                        context.SaveChanges();
-                        MessageBox.Show("Авто обновлено!");
-                        window.Close();
-                        LoadData();
-                    }
+                    context.Car.Add(car);
+                    context.SaveChanges();
+
+                    MessageBox.Show("Авто добавлено!");
+                    window.Close();
+                    LoadData();
                 };
 
                 editControl.OnCancel += () => window.Close();
@@ -139,29 +104,93 @@ namespace AutoReview.Pages
             }
             else
             {
-                MessageBox.Show("Выберите авто!");
+                MessageBox.Show("Вы не можете добавлять данные!");
+            }
+        }
+
+        private void EditCar(object sender, RoutedEventArgs e)
+        {
+            if (AuthData.Rights)
+            {
+                if (carsList.SelectedItem is Car selectedCar)
+                {
+                    var window = new Window
+                    {
+                        Title = "Редактировать авто",
+                        Width = 400,
+                        Height = 500,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    };
+
+                    var editControl = new CarEditControl();
+
+                    var manufacturers = context.Manufacturer.ToList();
+                    var engines = context.Engine.ToList();
+
+                    editControl.SetData(manufacturers, engines, selectedCar);
+
+                    editControl.OnSave += (control) =>
+                    {
+                        var car = context.Car.Find(selectedCar.Id_Car);
+
+                        if (car != null)
+                        {
+                            car.Model_Car = control.Model;
+                            car.Year_Release = int.Parse(control.Year);
+                            car.Body_Type = control.BodyType;
+                            car.Price_Car = decimal.Parse(control.Price);
+                            car.Manufacturer_Id = control.ManufacturerId ?? 0;
+                            car.Engine_Id = control.EngineId ?? 0;
+
+                            context.SaveChanges();
+                            MessageBox.Show("Авто обновлено!");
+                            window.Close();
+                            LoadData();
+                        }
+                    };
+
+                    editControl.OnCancel += () => window.Close();
+                    window.Content = editControl;
+                    window.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Выберите авто!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Вы не можете обновлять данные!");
             }
         }
 
         private void DeleteCar(object sender, RoutedEventArgs e)
         {
-            if (carsList.SelectedItem is Car selectedCar)
+            if (AuthData.Rights)
             {
-                if (MessageBox.Show($"Удалить {selectedCar.Model_Car}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (carsList.SelectedItem is Car selectedCar)
                 {
-                    var car = context.Car.Find(selectedCar.Id_Car);
-                    if (car != null)
+                    if (MessageBox.Show($"Удалить {selectedCar.Model_Car}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
-                        context.Car.Remove(car);
-                        context.SaveChanges();
-                        MessageBox.Show("Авто удалено!");
-                        LoadData();
+                        var car = context.Car.Find(selectedCar.Id_Car);
+
+                        if (car != null)
+                        {
+                            context.Car.Remove(car);
+                            context.SaveChanges();
+                            MessageBox.Show("Авто удалено!");
+                            LoadData();
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Выберите авто для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("Выберите авто!");
+                MessageBox.Show("Вы не можете удалять данные!");
             }
         }
 

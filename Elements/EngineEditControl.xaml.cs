@@ -55,13 +55,13 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (string.IsNullOrEmpty(EngineCapacity) && (!decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0))
+            if (string.IsNullOrEmpty(EngineCapacity) || (!decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0))
             {
                 MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
                 return;
             }
 
-            if (string.IsNullOrEmpty(EnginePower) && (!int.TryParse(EnginePower, out int power) || power <= 0))
+            if (string.IsNullOrEmpty(EnginePower) || (!int.TryParse(EnginePower, out int power) || power <= 0))
             {
                 MessageBox.Show("Введите мощность двигателя! (Пример: 150)");
                 return;

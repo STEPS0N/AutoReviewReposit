@@ -60,7 +60,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (UserId == null && string.IsNullOrWhiteSpace(UserPassword))
+            if (UserId == null || string.IsNullOrWhiteSpace(UserPassword))
             {
                 MessageBox.Show("Введите пароль пользователя!");
                 return;

@@ -58,11 +58,15 @@
                           BorderThickness="0">
 
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" 
+                                            Binding="{Binding Id_user}"
+                                            Width="50"/>
+                        
                         <DataGridTextColumn Header="Логин" 
                                             Binding="{Binding Login}"
                                             Width="150"/>
 
-                        <DataGridTextColumn Header="Пароль"
+                        <DataGridTextColumn Header="Пароль" x:Name="password"
                                             Binding="{Binding Password}"
                                             Width="150"/>
 

@@ -58,6 +58,10 @@
                       BorderThickness="0">
 
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" x:Name="id" 
+                                        Binding="{Binding Id_Engine}"
+                                        Width="50"/>
+                        
                         <DataGridTextColumn Header="Тип двигателя" 
                                         Binding="{Binding Type_Engine}"
                                         Width="150"/>
