@@ -83,7 +83,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (!int.TryParse(Year, out int year) || year < 1990)
+            if (!int.TryParse(Year, out int year) || year < 1990 || year > 9999)
             {
                 MessageBox.Show("Введите корректный год!");
                 return;
@@ -101,7 +101,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (!decimal.TryParse(Price, out decimal price) || price <= 0)
+            if (!decimal.TryParse(Price, out decimal price) || price <= 0 || price >= 999999999999)
             {
                 MessageBox.Show("Введите корректную цену!");
                 return;

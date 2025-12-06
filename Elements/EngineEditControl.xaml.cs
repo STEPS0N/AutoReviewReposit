@@ -55,15 +55,15 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (string.IsNullOrEmpty(EngineCapacity) || (!decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0))
+            if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\.\d$"))
             {
                 MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
                 return;
             }
 
-            if (string.IsNullOrEmpty(EnginePower) || (!int.TryParse(EnginePower, out int power) || power <= 0))
+            if (string.IsNullOrEmpty(EnginePower) || !int.TryParse(EnginePower, out int power) || power <= 1 || power >= 2000 || !System.Text.RegularExpressions.Regex.IsMatch(EnginePower, @"^\d{1,4}$"))
             {
-                MessageBox.Show("Введите мощность двигателя! (Пример: 150)");
+                MessageBox.Show("Введите мощность двигателя! (Пример: 150. От 1 до 2000)");
                 return;
             }
 
