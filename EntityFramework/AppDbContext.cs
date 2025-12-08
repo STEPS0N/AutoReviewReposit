@@ -49,11 +49,11 @@ namespace AutoReview.EntityFramework
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnName("fio");
-                entity.Property(e => e.Email_user)
+                entity.Property(e => e.Owner_Email)
                     .IsRequired()
                     .HasMaxLength(100)
-                    .HasColumnName("email_user");
-                entity.HasIndex(e => e.Email_user).IsUnique();
+                    .HasColumnName("owner_email");
+                entity.HasIndex(e => e.Owner_Email).IsUnique();
                 entity.Property(e => e.Phone_number)
                     .HasMaxLength(20)
                     .HasColumnName("phone_number");
@@ -74,12 +74,15 @@ namespace AutoReview.EntityFramework
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("country_brand");
-                entity.Property(e => e.Id_owner)
-                    .HasColumnName("id_owner");
+                entity.Property(e => e.Owner_Email)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnName("owner_email");
 
                 entity.HasOne(m => m.Owner)
                       .WithMany(o => o.Manufacturers)
-                      .HasForeignKey(m => m.Id_owner)
+                      .HasForeignKey(m => m.Owner_Email)
+                      .HasPrincipalKey(o => o.Owner_Email)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 

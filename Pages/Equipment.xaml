@@ -70,9 +70,9 @@
                                         Binding="{Binding Equipment_Level}" 
                                         Width="250"/>
 
-                        <DataGridTextColumn Header="Авто" 
-                                        Binding="{Binding Car_Id}" 
-                                        Width="150"/>
+                        <DataGridTextColumn Header="Модель автомобиля" 
+                                        Binding="{Binding Car.Model_Car}" 
+                                        Width="170"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

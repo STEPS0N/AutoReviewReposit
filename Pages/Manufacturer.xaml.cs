@@ -43,7 +43,7 @@ namespace AutoReview.Pages
                 {
                     Title = "Добавить производителя",
                     Width = 400,
-                    Height = 250,
+                    Height = 300,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     ResizeMode = ResizeMode.NoResize
                 };
@@ -64,7 +64,7 @@ namespace AutoReview.Pages
                     {
                         Title_Brand = control.ManufacturerTitle,
                         Country_Brand = control.ManufacturerCountry,
-                        Id_owner = control.OwnerId
+                        Owner_Email = control.OwnerEmail
                     };
 
                     context.Manufacturer.Add(manufacturer);
@@ -95,7 +95,7 @@ namespace AutoReview.Pages
                     {
                         Title = "Редактировать производителя",
                         Width = 400,
-                        Height = 250,
+                        Height = 300,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         ResizeMode = ResizeMode.NoResize
                     };
@@ -105,7 +105,7 @@ namespace AutoReview.Pages
                         ManufacturerTitle = selected.Title_Brand,
                         ManufacturerCountry = selected.Country_Brand,
                         ManufacturerId = selected.Id_Manufacturer,
-                        OwnerId = selected.Id_owner
+                        OwnerEmail = selected.Owner_Email
                     };
 
                     var owners = context.Owners.ToList();
@@ -119,7 +119,7 @@ namespace AutoReview.Pages
                         {
                             manufacturer.Title_Brand = control.ManufacturerTitle;
                             manufacturer.Country_Brand = control.ManufacturerCountry;
-                            manufacturer.Id_owner = control.OwnerId;
+                            manufacturer.Owner_Email = control.OwnerEmail;
 
                             context.SaveChanges();
                             MessageBox.Show("Производитель обновлен!");

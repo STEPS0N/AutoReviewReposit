@@ -51,7 +51,14 @@ namespace AutoReview.Pages
 
         private void Owners_Click(object sender, RoutedEventArgs e)
         {
-            mainWindow.OpenPage(MainWindow.pages.owners);
+            if (AuthData.Rights)
+            {
+                mainWindow.OpenPage(MainWindow.pages.owners);
+            }
+            else
+            {
+                MessageBox.Show("Вы не иммете доступа к этой информации!");
+            }
         }
 
         private void Back(object sender, RoutedEventArgs e)

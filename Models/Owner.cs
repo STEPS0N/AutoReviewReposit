@@ -10,7 +10,7 @@ namespace AutoReview.Classes
     {
         public int Id_owner { get; set; }
         public string Fio { get; set; }
-        public string Email_user { get; set; }
+        public string Owner_Email { get; set; }
         public string Phone_number { get; set; }
 
         public virtual ICollection<Manufacturer> Manufacturers { get; set; }

@@ -65,7 +65,7 @@ namespace AutoReview.Pages
                     var owner = new Owner
                     {
                         Fio = control.OwnerFio,
-                        Email_user = control.OwnerEmail,
+                        Owner_Email = control.OwnerEmail,
                         Phone_number = control.OwnerPhone
                     };
 
@@ -97,7 +97,7 @@ namespace AutoReview.Pages
                     {
                         Title = "Редактировать владельца",
                         Width = 400,
-                        Height = 250,
+                        Height = 300,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         ResizeMode = ResizeMode.NoResize
                     };
@@ -105,7 +105,7 @@ namespace AutoReview.Pages
                     var editControl = new OwnerEditControl
                     {
                         OwnerFio = selected.Fio,
-                        OwnerEmail = selected.Email_user,
+                        OwnerEmail = selected.Owner_Email,
                         OwnerPhone = selected.Phone_number,
                         OwnerId = selected.Id_owner
                     };
@@ -117,7 +117,7 @@ namespace AutoReview.Pages
                         if (owner != null)
                         {
                             owner.Fio = control.OwnerFio;
-                            owner.Email_user = control.OwnerEmail;
+                            owner.Owner_Email = control.OwnerEmail;
                             owner.Phone_number = control.OwnerPhone;
 
                             context.SaveChanges();

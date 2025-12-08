@@ -12,6 +12,7 @@
         <Style TargetType="Button">
             <Setter Property="Width" Value="110"/>
             <Setter Property="Height" Value="27"/>
+            <Setter Property="Background" Value="Coral"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -28,6 +29,7 @@
 
     <Grid Background="#2C3E50">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -48,7 +50,37 @@
             </StackPanel>
         </Border>
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10" Grid.ColumnSpan="2">
+        <Border Grid.Row="1" Margin="10 10 10 0">
+            <StackPanel>
+                <Border Height="40" Background="#e1f6ef" CornerRadius="5" >
+                    <StackPanel HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="10,4" Orientation="Horizontal">
+                        <TextBlock Text="Поиск:" 
+                                   Foreground="#2C3E50" 
+                                   FontSize="18"
+                                   FontFamily="Montserrat"
+                                   Margin="0, 5, 0, 0"/>
+                        <TextBox Width="252"
+                                 x:Name="tb_search"
+                                 Text="sda"
+                                 FontSize="18"
+                                 FontFamily="Montserrat"
+                                 Height="25"
+                                 Margin="10, 4, 0, 0"/>
+                        <Button Width="87"
+                                Content="Поиск"
+                                IsDefault="True"
+                                Click="btn_Search"
+                                FontSize="18"
+                                FontFamily="Montserrat"
+                                Foreground="White"
+                                Height="25"
+                                Margin="10, 4, 0, 0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10" Grid.ColumnSpan="2">
             <Border>
                 <DataGrid x:Name="carsList"
                   Background="White"
@@ -90,7 +122,7 @@
             </Border>
         </ScrollViewer>
 
-        <Border Grid.Row="2" Background="#34495E" Margin="10, 0, 10, 10" Padding="10" CornerRadius="5" Grid.ColumnSpan="2">
+        <Border Grid.Row="3" Background="#34495E" Margin="10, 0, 10, 10" Padding="10" CornerRadius="5" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

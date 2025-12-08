@@ -11,6 +11,8 @@
   <ItemGroup>
     <None Remove="Fonts\MONTSERRAT-ITALIC-VARIABLEFONT_WGHT.TTF" />
     <None Remove="Fonts\MONTSERRAT-VARIABLEFONT_WGHT.TTF" />
+    <None Remove="Image\car_1.png" />
+    <None Remove="Image\car_2.png" />
     <None Remove="Image\logo.png" />
   </ItemGroup>
 
@@ -27,6 +29,8 @@
   <ItemGroup>
     <Resource Include="Fonts\MONTSERRAT-ITALIC-VARIABLEFONT_WGHT.TTF" />
     <Resource Include="Fonts\MONTSERRAT-VARIABLEFONT_WGHT.TTF" />
+    <Resource Include="Image\car_1.png" />
+    <Resource Include="Image\car_2.png" />
     <Resource Include="Image\logo.png" />
   </ItemGroup>
 

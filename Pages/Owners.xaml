@@ -67,8 +67,8 @@
                             Width="200"/>
 
                         <DataGridTextColumn Header="Email" 
-                            Binding="{Binding Email_user}"
-                            Width="175"/>
+                            Binding="{Binding Owner_Email}"
+                            Width="190"/>
 
                         <DataGridTextColumn Header="Телефон" 
                             Binding="{Binding Phone_number}"

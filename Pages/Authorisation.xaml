@@ -32,65 +32,72 @@
     </Page.Resources>
 
     <Grid Background="#2C3E50">
-        <Grid Background="#00000000">
-            <StackPanel>
-                <Border Height="100" Background="#1A252F" HorizontalAlignment="Stretch">
-                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 11">
-                        <Image Source="/Image/logo.png" Width="100" Height="50"/>
-                        <TextBlock Text="Авторизация" 
-                       Foreground="White" 
-                       FontSize="18" 
-                       FontWeight="Bold"
-                       FontFamily="Montserrat"
-                       Margin="0, 5, 0, 0"/>
-                    </StackPanel>
-                </Border>
-
-                <StackPanel HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Top">
-                    <Label
-                        HorizontalAlignment="Left"
-                        Content="Логин"
-                        Foreground="White"
-                        Margin="0,10,10,0"
-                        FontSize="18"
-                        FontFamily="Montserrat"/>
-                    <TextBox
-                        Text="klimov"
-                        Padding="5"
-                        x:Name="tb_login"
-                        Width="250"
-                        Background="White"
-                        FontSize="18"
-                        Height="40"/>
-                    <Label
-                        HorizontalAlignment="Left"
-                        Content="Пароль"
-                        Foreground="White"
-                        Margin="0,10,10,0"
-                        FontSize="18"
-                        FontFamily="Montserrat"/>
-                    <PasswordBox
-                        Padding="5"
-                        x:Name="tb_password"
-                        Width="250"
-                        Background="White"
-                        FontSize="18"
-                        Height="40"
-                        Password="klim2007"/>
+        <Image Opacity="0.6" HorizontalAlignment="Left" Source="/Image/car_1.png" Margin="0,20,0,-20"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Height="100" Background="#1A252F">
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0, 11">
+                    <Image Source="/Image/logo.png" Width="100" Height="50"/>
+                    <TextBlock Text="Авторизация"
+                        Foreground="White" 
+                        FontSize="18" 
+                        FontWeight="Bold"
+                        FontFamily="Montserrat"
+                        Margin="0, 5, 0, 0"/>
                 </StackPanel>
+            </Border>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="Auto" VerticalAlignment="Top">
+                <Label
+                    HorizontalAlignment="Left"
+                    Content="Логин"
+                    Foreground="White"
+                    Margin="0,10,10,0"
+                    FontSize="18"
+                    FontFamily="Montserrat"/>
+                <TextBox
+                    Text="klimov"
+                    Padding="5"
+                    x:Name="tb_login"
+                    Width="250"
+                    Background="White"
+                    FontSize="18"
+                    Height="40"/>
+                <Label
+                    HorizontalAlignment="Left"
+                    Content="Пароль"
+                    Foreground="White"
+                    Margin="0,10,10,0"
+                    FontSize="18"
+                    FontFamily="Montserrat"/>
+                <PasswordBox
+                    Padding="5"
+                    x:Name="tb_password"
+                    Width="250"
+                    Background="White"
+                    FontSize="18"
+                    Height="40"
+                    Password="klim2007"/>
+            </StackPanel>
+            <Border Grid.Row="2" Height="80" VerticalAlignment="Bottom">
                 <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Button
                         IsDefault="True"
                         Click="Entry"
                         Width="100"
                         Height="30"
+                        Margin="0,0,0,30"
                         Content="Вход"
                         FontFamily="Montserrat"
                         FontWeight="Bold"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center"/>
                 </StackPanel>
-            </StackPanel>
+            </Border>
         </Grid>
+        <Image Opacity="0.6" HorizontalAlignment="Right" Source="/Image/car_2.png" Margin="0,122,0,-30"/>
     </Grid>
 </Page>

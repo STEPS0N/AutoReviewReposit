@@ -27,6 +27,7 @@ namespace AutoReview.Pages
     {
         public MainWindow mainWindow;
         private AppDbContext context;
+        public List<Car> allCars;
 
         public Main(MainWindow _mainWindow)
         {
@@ -197,6 +198,11 @@ namespace AutoReview.Pages
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
+        }
+
+        private void btn_Search(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

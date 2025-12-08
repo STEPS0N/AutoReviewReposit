@@ -11,7 +11,7 @@ namespace AutoReview.Classes
         public int Id_Manufacturer { get; set; }
         public string Title_Brand { get; set; }
         public string Country_Brand { get; set; }
-        public int Id_owner { get; set; }
+        public string Owner_Email { get; set; }
 
         public virtual Owner Owner { get; set; }
         public virtual ICollection<Car> Cars { get; set; }

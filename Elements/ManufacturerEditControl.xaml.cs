@@ -35,7 +35,7 @@ namespace AutoReview.Elements
             Owners = owners;
             OwnerComboBox.ItemsSource = owners;
             OwnerComboBox.DisplayMemberPath = "Fio";
-            OwnerComboBox.SelectedValuePath = "Id_owner";
+            OwnerComboBox.SelectedValuePath = "Owner_Email";
         }
 
         public string ManufacturerTitle
@@ -50,9 +50,9 @@ namespace AutoReview.Elements
             set => CountryBox.Text = value;
         }
 
-        public int OwnerId
+        public string OwnerEmail
         {
-            get => OwnerComboBox.SelectedValue != null ? (int)OwnerComboBox.SelectedValue : 0;
+            get => OwnerComboBox.SelectedValue?.ToString() ?? "";
             set => OwnerComboBox.SelectedValue = value;
         }
 
@@ -72,7 +72,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (OwnerId == 0)
+            if (OwnerEmail == null)
             {
                 MessageBox.Show("Выберите владельца!");
                 return;
