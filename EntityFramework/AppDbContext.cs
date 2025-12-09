@@ -31,8 +31,8 @@ namespace AutoReview.EntityFramework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(connectionPath, ServerVersion.AutoDetect(connectionPath));
-            //optionsBuilder.UseSqlServer(connectionPath);
+            //optionsBuilder.UseMySql(connectionPath, ServerVersion.AutoDetect(connectionPath));
+            optionsBuilder.UseSqlServer(connectionPath);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

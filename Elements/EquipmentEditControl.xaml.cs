@@ -29,11 +29,25 @@ namespace AutoReview.Elements
         public void SetData(List<Car> cars, Equipment equipment = null)
         {
             CarComboBox.ItemsSource = cars;
+            CarComboBox.DisplayMemberPath = "Model_Car";
+            CarComboBox.SelectedValuePath = "Id_Car";
 
             if (equipment != null)
             {
                 TitleBox.Text = equipment.Title_Equipment;
-                LevelBox.Text = equipment.Equipment_Level;
+
+                if (!string.IsNullOrEmpty(equipment.Equipment_Level))
+                {
+                    foreach (ComboBoxItem item in LevelBox.Items)
+                    {
+                        if (item.Content.ToString() == equipment.Equipment_Level)
+                        {
+                            LevelBox.SelectedItem = item;
+                            break;
+                        }
+                    }
+                }
+
                 CarComboBox.SelectedValue = equipment.Car_Id;
             }
         }

@@ -80,7 +80,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
             {
                 bool alreadyExists = context.Owners.Any(o => o.Fio == OwnerFio || o.Owner_Email == OwnerEmail);
 

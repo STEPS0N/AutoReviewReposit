@@ -33,7 +33,7 @@ namespace AutoReview.Pages
         {
             InitializeComponent();
             mainWindow = _mainWindow;
-            context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;");
             //context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
             if (AuthData.Rights == false)
             {
@@ -244,7 +244,7 @@ namespace AutoReview.Pages
 
                 (car.Model_Car?.ToLower() ?? "").Contains(searchText) ||
 
-                car.Year_Release.ToString().Contains(searchText) ||
+                (car.Year_Release.ToString()).Contains(searchText) ||
 
                 (car.Body_Type?.ToLower() ?? "").Contains(searchText) ||
 
@@ -254,6 +254,8 @@ namespace AutoReview.Pages
             ).ToList();
 
             carsList.ItemsSource = filteredCars;
+
+            tb_search.Text = "";
 
             if (!filteredCars.Any())
             {

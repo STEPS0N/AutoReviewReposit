@@ -83,7 +83,7 @@
                     FontSize="18"
                     FontFamily="Montserrat"/>
                 <TextBox
-                    Text="klimov"
+                    Text="admin"
                     Padding="5"
                     x:Name="tb_login"
                     Width="250"

@@ -43,31 +43,22 @@ namespace AutoReview.Pages
 
             try
             {
-                using (AppDbContext context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={login};password={password};"))
+                using (AppDbContext context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
                 {
+                    context.Database.OpenConnection();
+
                     try
                     {
-                        context.Database.OpenConnection();
-
                         using var cmd = context.Database.GetDbConnection().CreateCommand();
-                        cmd.CommandText = "SELECT Grant_priv FROM mysql.user WHERE User = @login";
+                        cmd.CommandText = $"SELECT IS_MEMBER('db_owner')";
+                        int result = (int)cmd.ExecuteScalar();
 
-                        var param = cmd.CreateParameter();
-                        param.ParameterName = "@login";
-                        param.Value = login;
-                        cmd.Parameters.Add(param);
-
-                        var result = cmd.ExecuteScalar()?.ToString();
-
-                        if (result == "Y")
+                        if (result == 1)
                         {
-                            AuthData.Rights = true;
-                            
-                            
                             MessageBox.Show("Здравствуйте админ!");
                             mainWindow.OpenPage(MainWindow.pages.menu);
                         }
-                        else if (result == "N")
+                        else
                         {
                             AuthData.Rights = false;
                             MessageBox.Show("Здравствуйте пользователь!");
@@ -76,6 +67,10 @@ namespace AutoReview.Pages
 
                         AuthData.Login = login;
                         AuthData.Password = password;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
                     }
                     finally
                     {
@@ -88,6 +83,7 @@ namespace AutoReview.Pages
                 MessageBox.Show($"Ошибка: Пользователь не найден! (Неправильный логин или пароль)");
                 return;
             }
+
         }
     }
 

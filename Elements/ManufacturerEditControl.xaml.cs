@@ -79,7 +79,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
             {
                 bool alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle || man.Owner_Email == OwnerEmail);
 
@@ -89,7 +89,7 @@ namespace AutoReview.Elements
                 }
                 if (alreadyExists)
                 {
-                    MessageBox.Show("Такая производитель уже существует в базе данных!");
+                    MessageBox.Show("Такой производитель уже существует в базе данных!");
                     return;
                 }
             }

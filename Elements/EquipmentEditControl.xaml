@@ -43,7 +43,7 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0">
-                <TextBlock Text="Автомобиль:"/>
+                <TextBlock Text="Модель автомобиля:"/>
                 <ComboBox x:Name="CarComboBox" 
                          DisplayMemberPath="Model_Car"
                          SelectedValuePath="Id_Car"
@@ -57,7 +57,14 @@
 
             <StackPanel Grid.Row="2">
                 <TextBlock Text="Уровень комплектации:"/>
-                <TextBox x:Name="LevelBox" MaxLength="50"/>
+                <ComboBox x:Name="LevelBox" Height="28">
+                    <ComboBoxItem>Базовый</ComboBoxItem>
+                    <ComboBoxItem>Стандартный</ComboBoxItem>
+                    <ComboBoxItem>Комфорт</ComboBoxItem>
+                    <ComboBoxItem>Премиум</ComboBoxItem>
+                    <ComboBoxItem>Люкс</ComboBoxItem>
+                    <ComboBoxItem>Спорт</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
 
             <StackPanel Grid.Row="4" 

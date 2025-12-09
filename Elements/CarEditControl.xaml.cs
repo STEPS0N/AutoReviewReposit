@@ -84,9 +84,9 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (!int.TryParse(Year, out int year) || year < 1990 || year > 9999)
+            if (!int.TryParse(Year, out int year) || year < 1990 || year > DateTime.Now.Year + 1)
             {
-                MessageBox.Show("Введите корректный год!");
+                MessageBox.Show($"Введите корректный год! Допустимый диапазон: 1990-{DateTime.Now.Year + 1}");
                 return;
             }
 
@@ -106,6 +106,18 @@ namespace AutoReview.Elements
             {
                 MessageBox.Show("Введите корректную цену!");
                 return;
+            }
+
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+            {
+                bool alreadyExists = context.Car.Any(car => car.Model_Car == Model && car.Manufacturer_Id == ManufacturerId.Value && 
+                car.Engine_Id == EngineId.Value);
+
+                if (alreadyExists)
+                {
+                    MessageBox.Show("Автомобиль с такой моделью, производителем и двигателем уже существует в базе данных!");
+                    return;
+                }
             }
 
             OnSave?.Invoke(this);
