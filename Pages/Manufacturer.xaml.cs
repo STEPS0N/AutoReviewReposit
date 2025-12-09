@@ -2,6 +2,7 @@
 using AutoReview.Classes;
 using AutoReview.Elements;
 using AutoReview.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -149,12 +150,66 @@ namespace AutoReview.Pages
             {
                 if (manufacturersList.SelectedItem is Classes.Manufacturer selected)
                 {
-                    if (MessageBox.Show($"Удалить производителя {selected.Title_Brand}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+                    var carsWithThisManufacturer = context.Car
+                    .Where(c => c.Manufacturer_Id == selected.Id_Manufacturer)
+                    .Include(c => c.Equipments)
+                    .ToList();
 
-                        if (manufacturer != null)
+                    if (carsWithThisManufacturer.Any())
+                    {
+                        string carsText = "";
+                        foreach (var car in carsWithThisManufacturer)
                         {
+                            carsText += $"- {car.Model_Car}";
+                            if (car.Equipments.Any())
+                            {
+                                carsText += $" (есть комплектации)";
+                            }
+                            carsText += "\n";
+                        }
+
+                        string message = $"ВНИМАНИЕ! Производитель '{selected.Title_Brand}' используется в {carsWithThisManufacturer.Count} автомобилях:\n\n" +
+                                        $"{carsText}\n" +
+                                        $"При удалении производителя эти автомобили и их комплектации тоже удалятся!\n\n" +
+                                        $"Продолжить удаление?";
+
+                        if (MessageBox.Show(message, "Подтверждение удаления",
+                            MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            try
+                            {
+                                foreach (var car in carsWithThisManufacturer)
+                                {
+                                    var equipment = context.Equipment
+                                        .Where(e => e.Car_Id == car.Id_Car)
+                                        .ToList();
+
+                                    if (equipment.Any())
+                                    {
+                                        context.Equipment.RemoveRange(equipment);
+                                    }
+                                }
+
+                                context.Car.RemoveRange(carsWithThisManufacturer);
+                                var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+                                context.Manufacturer.Remove(manufacturer);
+
+                                context.SaveChanges();
+                                MessageBox.Show($"Удалено: производитель и {carsWithThisManufacturer.Count} автомобилей");
+                                LoadData();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Ошибка при удалении: {ex.Message}", "Ошибка");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (MessageBox.Show($"Удалить производителя '{selected.Title_Brand}'?",
+                            "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
                             context.Manufacturer.Remove(manufacturer);
                             context.SaveChanges();
                             MessageBox.Show("Производитель удален!");

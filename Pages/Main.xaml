@@ -16,11 +16,40 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5" 
-                        Background="{TemplateBinding Background}">
+                        <Border x:Name="border" 
+                            CornerRadius="5" 
+                            Background="{TemplateBinding Background}"
+                            Opacity="1">
                             <ContentPresenter HorizontalAlignment="Center" 
-                                      VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"/>
                         </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.4"
+                                            Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -61,8 +90,7 @@
                                    Margin="0, 5, 0, 0"/>
                         <TextBox Width="252"
                                  x:Name="tb_search"
-                                 Text="sda"
-                                 FontSize="18"
+                                 FontSize="15"
                                  FontFamily="Montserrat"
                                  Height="25"
                                  Margin="10, 4, 0, 0"/>
@@ -70,7 +98,7 @@
                                 Content="Поиск"
                                 IsDefault="True"
                                 Click="btn_Search"
-                                FontSize="18"
+                                FontSize="15"
                                 FontFamily="Montserrat"
                                 Foreground="White"
                                 Height="25"
@@ -111,8 +139,14 @@
                                     Width="150"/>
 
                         <DataGridTextColumn Header="Двигатель"
-                                    Binding="{Binding Engine.Type_Engine}" 
-                                    Width="150"/>
+                                            Width="200">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1:0.0} л.">
+                                    <Binding Path="Engine.Type_Engine"/>
+                                    <Binding Path="Engine.Capacity_Engine"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
 
                         <DataGridTextColumn Header="Цена" 
                                     Binding="{Binding Price_Car, StringFormat='{}₽{0:N0}'}" 
@@ -131,6 +165,7 @@
 
                 <Button Content="В меню"
                     Click="BackMenu"
+                    IsCancel="True"
                     Background="AntiqueWhite"
                     FontWeight="Bold"
                     FontFamily="Montserrat"
@@ -156,7 +191,7 @@
                     FontFamily="Montserrat"
                     Foreground="White"
                     Padding="10, 5"
-                    Margin="0, 0, 10, 0"/>
+                    Margin="0, 0, 10, 0" Width="129"/>
 
                     <Button Content="Удалить"
                     Click="DeleteCar"

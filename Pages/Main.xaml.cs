@@ -52,6 +52,7 @@ namespace AutoReview.Pages
                     .ToList();
 
                 carsList.ItemsSource = cars;
+                allCars = cars;
             }
             catch (Exception ex)
             {
@@ -171,22 +172,49 @@ namespace AutoReview.Pages
             {
                 if (carsList.SelectedItem is Car selectedCar)
                 {
-                    if (MessageBox.Show($"Удалить {selectedCar.Model_Car}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        var car = context.Car.Find(selectedCar.Id_Car);
+                    var equipmentList = context.Equipment.Where(e => e.Car_Id == selectedCar.Id_Car).ToList();
 
-                        if (car != null)
+                    if (equipmentList.Any())
+                    {
+                        string equipText = "";
+                        foreach (var equip in equipmentList)
                         {
-                            context.Car.Remove(car);
+                            equipText += $"- {equip.Title_Equipment} ({equip.Equipment_Level})\n";
+                        }
+
+                        string message = $"Удалить автомобиль:\n" +
+                                        $"{selectedCar.Manufacturer?.Title_Brand} {selectedCar.Model_Car}\n\n" +
+                                        $"Также удалятся комплектации:\n{equipText}\n" +
+                                        $"Продолжить?";
+
+                        if (MessageBox.Show(message, "Подтверждение",
+                            MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        {
+                            context.Equipment.RemoveRange(equipmentList);
+                            context.Car.Remove(selectedCar);
                             context.SaveChanges();
-                            MessageBox.Show("Авто удалено!");
-                            LoadData();
+                            MessageBox.Show("Удалено!");
                         }
                     }
+                    else
+                    {
+                        string message = $"Удалить автомобиль:\n" +
+                                        $"{selectedCar.Manufacturer?.Title_Brand} {selectedCar.Model_Car}?";
+
+                        if (MessageBox.Show(message, "Подтверждение",
+                            MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            context.Car.Remove(selectedCar);
+                            context.SaveChanges();
+                            MessageBox.Show("Автомобиль удален!");
+                        }
+                    }
+
+                    LoadData();
                 }
                 else
                 {
-                    MessageBox.Show("Выберите авто для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Выберите авто для удаления!");
                 }
             }
             else
@@ -202,7 +230,36 @@ namespace AutoReview.Pages
 
         private void btn_Search(object sender, RoutedEventArgs e)
         {
+            string searchText = tb_search.Text.ToLower().Trim();
 
+            if (string.IsNullOrEmpty(searchText))
+            {
+                carsList.ItemsSource = allCars;
+                return;
+            }
+
+            var filteredCars = allCars.Where(car =>
+
+                (car.Manufacturer?.Title_Brand?.ToLower() ?? "").Contains(searchText) ||
+
+                (car.Model_Car?.ToLower() ?? "").Contains(searchText) ||
+
+                car.Year_Release.ToString().Contains(searchText) ||
+
+                (car.Body_Type?.ToLower() ?? "").Contains(searchText) ||
+
+                (car.Engine?.Type_Engine?.ToLower() ?? "").Contains(searchText) ||
+
+                car.Price_Car.ToString().Contains(searchText)
+            ).ToList();
+
+            carsList.ItemsSource = filteredCars;
+
+            if (!filteredCars.Any())
+            {
+                MessageBox.Show("Ничего не найдено по вашему запросу.", "Результаты поиска",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

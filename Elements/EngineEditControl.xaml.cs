@@ -1,4 +1,5 @@
 ﻿using AutoReview.Classes;
+using AutoReview.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,7 +56,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\.\d$"))
+            if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\,\d$"))
             {
                 MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
                 return;
@@ -65,6 +66,24 @@ namespace AutoReview.Elements
             {
                 MessageBox.Show("Введите мощность двигателя! (Пример: 150. От 1 до 2000)");
                 return;
+            }
+
+            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            {
+                bool alreadyExists = context.Engine.Any(eng => eng.Capacity_Engine == capacity &&
+                eng.Power_Engine == power);
+
+                if (EngineId.HasValue)
+                {
+                    alreadyExists = context.Engine.Any(eng => eng.Capacity_Engine == capacity && eng.Power_Engine == power 
+                    && eng.Id_Engine != EngineId.Value);
+                }
+
+                if (alreadyExists)
+                {
+                    MessageBox.Show("Такой двигатель уже существует в базе данных!");
+                    return;
+                }
             }
 
             OnSave?.Invoke(this);

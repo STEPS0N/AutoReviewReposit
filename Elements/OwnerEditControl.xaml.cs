@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoReview.Classes;
+using AutoReview.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -76,6 +78,22 @@ namespace AutoReview.Elements
             {
                 MessageBox.Show("Неверный формат телефона! \n Должно начинаться с '+' и содержать от 3 до 12 цифр. \n Пример: +79128887054");
                 return;
+            }
+
+            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            {
+                bool alreadyExists = context.Owners.Any(o => o.Fio == OwnerFio || o.Owner_Email == OwnerEmail);
+
+                if (OwnerId.HasValue)
+                {
+                    alreadyExists = context.Owners.Any(o => o.Fio == OwnerFio || o.Owner_Email == OwnerEmail ||
+                    o.Id_owner != OwnerId.Value);
+                }
+                if (alreadyExists)
+                {
+                    MessageBox.Show("Такой владелец уже существует в базе данных!");
+                    return;
+                }
             }
 
             OnSave?.Invoke(this);

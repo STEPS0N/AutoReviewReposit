@@ -58,8 +58,8 @@
             </ComboBox>
 
             <TextBlock Text="Двигатель:" Foreground="White" Margin="0,0,0,5"/>
-            <ComboBox x:Name="EngineBox" DisplayMemberPath="Type_Engine"
-                     SelectedValuePath="Id_Engine" Margin="0,0,0,10"/>
+            <ComboBox x:Name="EngineBox" DisplayMemberPath="TypeAndCapacity"
+                    SelectedValuePath="Id_Engine" Margin="0,0,0,10"/>
 
             <TextBlock Text="Цена (₽):" Foreground="White" Margin="0,0,0,5"/>
             <TextBox x:Name="PriceBox" Margin="0,0,0,10"/>

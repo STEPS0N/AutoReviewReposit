@@ -1,4 +1,5 @@
 ﻿using AutoReview.Classes;
+using AutoReview.EntityFramework;
 using AutoReview.Pages;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,21 @@ namespace AutoReview.Elements
             {
                 MessageBox.Show("Выберите владельца!");
                 return;
+            }
+
+            using (var context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};"))
+            {
+                bool alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle || man.Owner_Email == OwnerEmail);
+
+                if (ManufacturerId.HasValue)
+                {
+                    alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle || man.Owner_Email == OwnerEmail || man.Id_Manufacturer != ManufacturerId.Value);
+                }
+                if (alreadyExists)
+                {
+                    MessageBox.Show("Такая производитель уже существует в базе данных!");
+                    return;
+                }
             }
 
             OnSave?.Invoke(this);

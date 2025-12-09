@@ -148,17 +148,16 @@ namespace AutoReview.Pages
             {
                 if (ownersList.SelectedItem is Owner selected)
                 {
-                    if (MessageBox.Show($"Удалить владельца {selected.Fio}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    string message = $"Удалить владельца '{selected.Fio}'?\n" +
+                       $"Все его производители, автомобили и комплектации также удалятся!";
+
+                    if (MessageBox.Show(message, "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         var owner = context.Owners.Find(selected.Id_owner);
-
-                        if (owner != null)
-                        {
-                            context.Owners.Remove(owner);
-                            context.SaveChanges();
-                            MessageBox.Show("Владелец удален!");
-                            LoadData();
-                        }
+                        context.Owners.Remove(owner);
+                        context.SaveChanges();
+                        MessageBox.Show("Удалено!");
+                        LoadData();
                     }
                 }
                 else

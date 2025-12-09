@@ -62,6 +62,8 @@ namespace AutoReview.Pages
                         if (result == "Y")
                         {
                             AuthData.Rights = true;
+                            
+                            
                             MessageBox.Show("Здравствуйте админ!");
                             mainWindow.OpenPage(MainWindow.pages.menu);
                         }

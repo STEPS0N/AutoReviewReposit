@@ -15,6 +15,8 @@ namespace AutoReview.Classes
 
         public virtual ICollection<Car> Cars { get; set; }
 
+        public string TypeAndCapacity => $"{Type_Engine} ({Capacity_Engine} л)";
+
         public Engine()
         {
             Cars = new List<Car>();

@@ -2,6 +2,7 @@
 using AutoReview.Classes;
 using AutoReview.Elements;
 using AutoReview.EntityFramework;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Windows;
@@ -150,22 +151,54 @@ namespace AutoReview.Pages
             {
                 if (engineList.SelectedItem is Classes.Engine selected)
                 {
-                    if (MessageBox.Show($"Удалить двигатель {selected.Type_Engine}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        var engine = context.Engine.Find(selected.Id_Engine);
+                    var carsWithThisEngine = context.Car.Where(c => c.Engine_Id == selected.Id_Engine).ToList();
 
-                        if (engine != null)
+                    if (carsWithThisEngine.Count > 0)
+                    {
+                        string carList = "";
+                        foreach (var car in carsWithThisEngine)
                         {
+                            carList += $"- {car.Manufacturer?.Title_Brand} {car.Model_Car}\n";
+                        }
+
+                        var result = MessageBox.Show(
+                            $"ВНИМАНИЕ! Этот двигатель используется в {carsWithThisEngine.Count} автомобилях:\n\n" +
+                            carList +
+                            "\nПри удалении двигателя эти автомобили тоже удалятся.\n" +
+                            "Продолжить?",
+                            "Подтверждение удаления",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            context.Car.RemoveRange(carsWithThisEngine);
+                            context.SaveChanges();
+
+                            var engineToDelete = context.Engine.Find(selected.Id_Engine);
+                            context.Engine.Remove(engineToDelete);
+                            context.SaveChanges();
+
+                            MessageBox.Show($"Удалено: двигатель и {carsWithThisEngine.Count} автомобилей");
+                        }
+                    }
+                    else
+                    {
+                        if (MessageBox.Show($"Удалить двигатель '{selected.Type_Engine}'?",
+                            "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            var engine = context.Engine.Find(selected.Id_Engine);
                             context.Engine.Remove(engine);
                             context.SaveChanges();
                             MessageBox.Show("Двигатель удален!");
-                            LoadData();
                         }
                     }
+
+                    LoadData();
                 }
                 else
                 {
-                    MessageBox.Show("Выберите двигатель для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Выберите двигатель для удаления!");
                 }
             }
             else

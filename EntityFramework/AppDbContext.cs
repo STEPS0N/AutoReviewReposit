@@ -83,7 +83,7 @@ namespace AutoReview.EntityFramework
                       .WithMany(o => o.Manufacturers)
                       .HasForeignKey(m => m.Owner_Email)
                       .HasPrincipalKey(o => o.Owner_Email)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Classes.Engine>(entity =>
@@ -127,6 +127,7 @@ namespace AutoReview.EntityFramework
 
                 entity.Property(e => e.Manufacturer_Id)
                     .HasColumnName("id_manufacturer");
+
                 entity.Property(e => e.Engine_Id)
                     .HasColumnName("id_engine");
 

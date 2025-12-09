@@ -12,14 +12,44 @@
         <Style TargetType="Button">
             <Setter Property="Width" Value="110"/>
             <Setter Property="Height" Value="27"/>
+            <Setter Property="Background" Value="Coral"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5" 
-                    Background="{TemplateBinding Background}">
+                        <Border x:Name="border" 
+                        CornerRadius="5" 
+                        Background="{TemplateBinding Background}"
+                        Opacity="1">
                             <ContentPresenter HorizontalAlignment="Center" 
-                                  VerticalAlignment="Center"/>
+                                      VerticalAlignment="Center"/>
                         </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                        Storyboard.TargetName="border"
+                                        Storyboard.TargetProperty="Opacity"
+                                        To="0.4"
+                                        Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                        Storyboard.TargetName="border"
+                                        Storyboard.TargetProperty="Opacity"
+                                        To="1"
+                                        Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -67,7 +97,7 @@
                                         Width="150"/>
 
                         <DataGridTextColumn Header="Объём двигателя"
-                                        Binding="{Binding Capacity_Engine}" 
+                                        Binding="{Binding Capacity_Engine}"
                                         Width="200"/>
 
                         <DataGridTextColumn Header="Сила двигателя" 
@@ -86,6 +116,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Content="В меню"
+                    IsCancel="True"
                     Click="BackMenu"
                     Background="AntiqueWhite"
                     FontWeight="Bold"

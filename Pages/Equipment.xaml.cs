@@ -4,6 +4,7 @@ using AutoReview.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -160,12 +161,13 @@ namespace AutoReview.Pages
         {
             if (AuthData.Rights)
             {
-                if (equipmentList.SelectedItem is Classes.Equipment selectedEquipment)
+                if (equipmentList.SelectedItem is Classes.Equipment selected)
                 {
-                    if (MessageBox.Show($"Удалить комплектацию '{selectedEquipment.Title_Equipment}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    {
-                        var equipment = context.Equipment.Find(selectedEquipment.Id_Equipment);
+                    string message = $"Удалить комплектацию:\n{selected.Title_Equipment} ({selected.Equipment_Level})?";
 
+                    if (MessageBox.Show(message, "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        var equipment = context.Equipment.Find(selected.Id_Equipment);
                         if (equipment != null)
                         {
                             context.Equipment.Remove(equipment);
@@ -177,7 +179,7 @@ namespace AutoReview.Pages
                 }
                 else
                 {
-                    MessageBox.Show("Выберите комплектацию для удаления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Выберите комплектацию для удаления!");
                 }
             }
             else
