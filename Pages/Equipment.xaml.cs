@@ -28,6 +28,7 @@ namespace AutoReview.Pages
         public MainWindow mainWindow;
         private AppDbContext context;
 
+        //Инициализация компонентов
         public Equipment(MainWindow _mainWindow)
         {
             InitializeComponent();
@@ -40,10 +41,12 @@ namespace AutoReview.Pages
             LoadData();
         }
 
+        //Метод загрузки таблицы комплектаций в DataGrid
         private void LoadData()
         {
             try
             {
+                //Если связаны?
                 var equipmentData = context.Equipment
                     .Include(e => e.Car)
                     .ThenInclude(c => c.Manufacturer)
@@ -57,6 +60,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод добавления комплектации
         private void AddEquipment(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -103,6 +107,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод редактирования комплектации
         private void EditEquipment(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -157,6 +162,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод удаления комплектации
         private void DeleteEquipment(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -188,6 +194,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Навигация на страницу Menu
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();

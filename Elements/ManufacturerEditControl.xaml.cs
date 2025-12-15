@@ -31,6 +31,7 @@ namespace AutoReview.Elements
             InitializeComponent();
         }
 
+        //Метод инициализации выпадающего списка владельцев
         public void LoadOwners(List<Owner> owners)
         {
             Owners = owners;
@@ -39,26 +40,25 @@ namespace AutoReview.Elements
             OwnerComboBox.SelectedValuePath = "Owner_Email";
         }
 
+        // Основные свойства
         public string ManufacturerTitle
         {
             get => TitleBox.Text;
             set => TitleBox.Text = value;
         }
-
         public string ManufacturerCountry
         {
             get => CountryBox.Text;
             set => CountryBox.Text = value;
         }
-
         public string OwnerEmail
         {
             get => OwnerComboBox.SelectedValue?.ToString() ?? "";
             set => OwnerComboBox.SelectedValue = value;
         }
-
         public int? ManufacturerId { get; set; }
 
+        //Метод для сохранения изменений и валидации данных
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(ManufacturerTitle))
@@ -79,17 +79,19 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};" +
+                $"Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
             {
                 bool alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle || man.Owner_Email == OwnerEmail);
 
                 if (ManufacturerId.HasValue)
                 {
-                    alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle || man.Owner_Email == OwnerEmail || man.Id_Manufacturer != ManufacturerId.Value);
+                    alreadyExists = context.Manufacturer.Any(man => man.Title_Brand == ManufacturerTitle 
+                    || man.Owner_Email == OwnerEmail || man.Id_Manufacturer != ManufacturerId.Value);
                 }
                 if (alreadyExists)
                 {
-                    MessageBox.Show("Такой производитель уже существует в базе данных!");
+                    MessageBox.Show("Такой производитель уже существует в базе данных!\nОшибка: название марки или владелец уже используются!");
                     return;
                 }
             }
@@ -97,6 +99,7 @@ namespace AutoReview.Elements
             OnSave?.Invoke(this);
         }
 
+        //Метод отмены изменений
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             OnCancel?.Invoke();

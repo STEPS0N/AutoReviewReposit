@@ -28,6 +28,9 @@ namespace AutoReview.Elements
             InitializeComponent();
         }
 
+        // Метод инициализации данными
+        // Заполняет выпадающие списки производителей и двигателей
+        // Если передан существующий автомобиль (car != null) - заполняет форму для редактирования
         public void SetData(List<Manufacturer> manufacturers, List<Engine> engines, Car car = null)
         {
             ManufacturerBox.ItemsSource = manufacturers;
@@ -63,6 +66,7 @@ namespace AutoReview.Elements
             }
         }
 
+        // Основные свойства
         public string Model => ModelBox.Text;
         public string Year => YearBox.Text;
         public string BodyType => BodyTypeBox.Text;
@@ -70,6 +74,7 @@ namespace AutoReview.Elements
         public int? ManufacturerId => ManufacturerBox.SelectedValue as int?;
         public int? EngineId => EngineBox.SelectedValue as int?;
 
+        //Метод для сохранения изменений и валидации данных
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (ManufacturerBox.SelectedValue == null)
@@ -108,9 +113,10 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;" +
+                $"User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;TrustServerCertificate=True;")) 
             {
-                bool alreadyExists = context.Car.Any(car => car.Model_Car == Model && car.Manufacturer_Id == ManufacturerId.Value && 
+                bool alreadyExists = context.Car.Any(car => car.Model_Car == Model && car.Manufacturer_Id == ManufacturerId.Value &&
                 car.Engine_Id == EngineId.Value);
 
                 if (alreadyExists)
@@ -123,9 +129,12 @@ namespace AutoReview.Elements
             OnSave?.Invoke(this);
         }
 
+        //Метод отмены изменений
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             OnCancel?.Invoke();
         }
     }
 }
+
+//ISP-23-1-7\\KLIM_MILN

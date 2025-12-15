@@ -19,6 +19,7 @@ namespace AutoReview.Pages
         public MainWindow mainWindow;
         private AppDbContext context;
 
+        //Инициализация компонентов
         public Manufacturer(MainWindow _mainWindow)
         {
             InitializeComponent();
@@ -31,11 +32,13 @@ namespace AutoReview.Pages
             LoadData();
         }
 
+        //Метод загрузки таблицы производителей в DataGrid
         private void LoadData()
         {
             manufacturersList.ItemsSource = context.Manufacturer.ToList();
         }
 
+        //Метод добавления производителя
         private void AddManufacture(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -49,12 +52,7 @@ namespace AutoReview.Pages
                     ResizeMode = ResizeMode.NoResize
                 };
 
-                var editControl = new ManufacturerEditControl
-                {
-                    ManufacturerTitle = "",
-                    ManufacturerCountry = "",
-                    ManufacturerId = null
-                };
+                var editControl = new ManufacturerEditControl();
 
                 var owners = context.Owners.ToList();
                 editControl.LoadOwners(owners);
@@ -86,6 +84,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод редактирования производителя
         private void EditManufacture(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -144,6 +143,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод удаления производителя
         private void DeleteManufacture(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -207,13 +207,21 @@ namespace AutoReview.Pages
                     else
                     {
                         if (MessageBox.Show($"Удалить производителя '{selected.Title_Brand}'?",
-                            "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
-                            context.Manufacturer.Remove(manufacturer);
-                            context.SaveChanges();
-                            MessageBox.Show("Производитель удален!");
-                            LoadData();
+                            try
+                            {
+                                var manufacturer = context.Manufacturer.Find(selected.Id_Manufacturer);
+                                context.Manufacturer.Remove(manufacturer);
+                                context.SaveChanges();
+
+                                MessageBox.Show($"Производитель '{selected.Title_Brand}' удалён");
+                                LoadData();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка");
+                            }
                         }
                     }
                 }
@@ -228,6 +236,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Навигация на страницу Menu
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();

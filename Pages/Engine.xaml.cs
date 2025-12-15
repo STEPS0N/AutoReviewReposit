@@ -18,6 +18,7 @@ namespace AutoReview.Pages
         public MainWindow mainWindow;
         private AppDbContext context;
 
+        //Инициализация компонентов
         public Engine(MainWindow _mainWindow)
         {
             InitializeComponent();
@@ -30,15 +31,19 @@ namespace AutoReview.Pages
             LoadData();
         }
 
+        //Метод загрузки таблицы двигателей в DataGrid
         private void LoadData()
         {
             engineList.ItemsSource = context.Engine.ToList();
         }
 
+        //Метод добавления двигателя
         private void AddEngine(object sender, RoutedEventArgs e)
         {
+            //Права пользователя, нет возможности добавления (аналогично для остальных страниц)
             if (AuthData.Rights)
             {
+                //Создание окна для добавления
                 var window = new Window
                 {
                     Title = "Добавить двигатель",
@@ -48,6 +53,7 @@ namespace AutoReview.Pages
                     ResizeMode = ResizeMode.NoResize
                 };
 
+                //Использование созданного пользовательского элемента управления
                 var editControl = new EngineEditControl
                 {
                     EngineType = "",
@@ -56,6 +62,7 @@ namespace AutoReview.Pages
                     EngineId = null
                 };
 
+                //Добавление элемента двигателя
                 editControl.OnSave += (control) =>
                 {
                     var engine = new Classes.Engine
@@ -85,14 +92,16 @@ namespace AutoReview.Pages
             
         }
 
+        //Метод редактирования двигателя
         private void EditEngine(object sender, RoutedEventArgs e)
         {
+            //Права пользователя, нет возможности обновления (аналогично для остальных страниц)
             if (AuthData.Rights)
             {
-                
-
+                //Выбран ли двигатель?
                 if (engineList.SelectedItem is Classes.Engine selected)
                 {
+                    //Создание окна для редактирования
                     var window = new Window
                     {
                         Title = "Редактировать двигатель",
@@ -102,6 +111,7 @@ namespace AutoReview.Pages
                         ResizeMode = ResizeMode.NoResize
                     };
 
+                    //Использование созданного пользовательского элемента управления
                     var editControl = new EngineEditControl
                     {
                         EngineType = selected.Type_Engine,
@@ -110,6 +120,7 @@ namespace AutoReview.Pages
                         EngineId = selected.Id_Engine
                     };
 
+                    //Редактирование элемента двигателя
                     editControl.OnSave += (control) =>
                     {
 
@@ -145,14 +156,17 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод удаления двигателя
         private void DeleteEngine(object sender, RoutedEventArgs e)
         {
+            //Права пользователя, нет возможности удаления (аналогично для остальных страниц)
             if (AuthData.Rights)
             {
+                //Выбран ли двигатель?
                 if (engineList.SelectedItem is Classes.Engine selected)
                 {
                     var carsWithThisEngine = context.Car.Where(c => c.Engine_Id == selected.Id_Engine).ToList();
-
+                    //Если есть двигатели использующиеся в авто?
                     if (carsWithThisEngine.Count > 0)
                     {
                         string carList = "";
@@ -207,6 +221,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Навигация на страницу Menu
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();

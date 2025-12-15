@@ -29,12 +29,13 @@ namespace AutoReview.Pages
         private AppDbContext context;
         public List<Car> allCars;
 
+        //Инициализация компонентов
         public Main(MainWindow _mainWindow)
         {
             InitializeComponent();
             mainWindow = _mainWindow;
-            context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;");
-            //context = new AppDbContext($"server=localhost;port=3307;database=AutoReview;user={AuthData.Login};password={AuthData.Password};");
+            context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};" +
+                $"Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;");
             if (AuthData.Rights == false)
             {
                 id.Visibility = Visibility.Collapsed;
@@ -42,6 +43,7 @@ namespace AutoReview.Pages
             LoadData();
         }
 
+        //Метод загрузки таблицы автомобилей в DataGrid
         private void LoadData()
         {
             try
@@ -60,6 +62,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод добавления автомобиля
         private void AddCar(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -110,6 +113,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод редактирования автомобиля
         private void EditCar(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -166,6 +170,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод удаления автомобиля
         private void DeleteCar(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -223,11 +228,13 @@ namespace AutoReview.Pages
             }
         }
 
+        //Навигация на страницу Menu
         private void BackMenu(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
 
+        //Метод для фильтрации поиска элементов по запросу пользователя
         private void btn_Search(object sender, RoutedEventArgs e)
         {
             string searchText = tb_search.Text.ToLower().Trim();
@@ -262,6 +269,13 @@ namespace AutoReview.Pages
                 MessageBox.Show("Ничего не найдено по вашему запросу.", "Результаты поиска",
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        //Метод сброса фильтрации поиска элементов по запросу пользователя
+        private void btn_SearchNull(object sender, RoutedEventArgs e)
+        {
+            carsList.ItemsSource = allCars;
+            tb_search.Text = "";
         }
     }
 }

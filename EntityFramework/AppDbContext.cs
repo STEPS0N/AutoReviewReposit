@@ -15,6 +15,7 @@ namespace AutoReview.EntityFramework
 {
     public class AppDbContext : DbContext
     {
+        //Коллекции сущностей (таблицы в БД)
         public DbSet<Owner> Owners { get; set; }
         public DbSet<Car> Car { get; set; }
         public DbSet<Classes.Manufacturer> Manufacturer { get; set; }
@@ -25,20 +26,23 @@ namespace AutoReview.EntityFramework
         public string connectionPath;
         public AppDbContext(string connectionPath)
         {
+            //Строка подключения хранящаяся в меню авторизации
             this.connectionPath = connectionPath;
-            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseMySql(connectionPath, ServerVersion.AutoDetect(connectionPath));
+            //Метод для подключения к БД
             optionsBuilder.UseSqlServer(connectionPath);
         }
 
+
+        //Метод хранящий в себе настроенные отношения таблицы
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            //Настройка Owner
             modelBuilder.Entity<Owner>(entity =>
             {
                 entity.ToTable("Owners");
@@ -59,6 +63,7 @@ namespace AutoReview.EntityFramework
                     .HasColumnName("phone_number");
             });
 
+            //Настройка Manufacturer
             modelBuilder.Entity<Classes.Manufacturer>(entity =>
             {
                 entity.ToTable("Manufacturer");
@@ -79,6 +84,7 @@ namespace AutoReview.EntityFramework
                     .HasMaxLength(100)
                     .HasColumnName("owner_email");
 
+                //Связь Owner c Manufacturers
                 entity.HasOne(m => m.Owner)
                       .WithMany(o => o.Manufacturers)
                       .HasForeignKey(m => m.Owner_Email)
@@ -86,6 +92,7 @@ namespace AutoReview.EntityFramework
                       .OnDelete(DeleteBehavior.Cascade);
             });
 
+            //Настройка Engine
             modelBuilder.Entity<Classes.Engine>(entity =>
             {
                 entity.ToTable("Engine");
@@ -104,6 +111,7 @@ namespace AutoReview.EntityFramework
                     .HasColumnName("power_engine");
             });
 
+            //Настройка Car
             modelBuilder.Entity<Car>(entity =>
             {
                 entity.ToTable("Car");
@@ -131,17 +139,20 @@ namespace AutoReview.EntityFramework
                 entity.Property(e => e.Engine_Id)
                     .HasColumnName("id_engine");
 
+                //Связь Manufacturer c Cars
                 entity.HasOne(c => c.Manufacturer)
                       .WithMany(m => m.Cars)
                       .HasForeignKey(c => c.Manufacturer_Id)
                       .OnDelete(DeleteBehavior.Restrict);
 
+                //Связь Engine c Cars
                 entity.HasOne(c => c.Engine)
                       .WithMany(e => e.Cars)
                       .HasForeignKey(c => c.Engine_Id)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
+            //Настройка Equipment
             modelBuilder.Entity<Classes.Equipment>(entity =>
             {
                 entity.ToTable("Equipment");
@@ -159,6 +170,7 @@ namespace AutoReview.EntityFramework
                 entity.Property(e => e.Car_Id)
                     .HasColumnName("id_car");
 
+                //Связь Car c Equipments
                 entity.HasOne(e => e.Car)
                       .WithMany(c => c.Equipments)
                       .HasForeignKey(e => e.Car_Id)

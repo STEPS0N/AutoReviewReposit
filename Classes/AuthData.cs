@@ -4,6 +4,7 @@ using System.Text;
 
 namespace AutoReview.Classes
 {
+    //Отвечает за хранение данных только в процессе сессии, тем самм обеспечивая безопасность
     public class AuthData
     {
         public static string Login { get; set; }

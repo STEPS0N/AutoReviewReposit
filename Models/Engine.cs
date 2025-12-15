@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Classes
 {
+    //Engine описывает двигатели автомобилей, их тип, объём и мощность
     public class Engine
     {
         public int Id_Engine { get; set; }

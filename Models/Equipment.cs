@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Classes
 {
+    //Equipment представляет из себя комплектации для любого автомобиля, его название и уровень
     public class Equipment
     {
         public int Id_Equipment { get; set; }

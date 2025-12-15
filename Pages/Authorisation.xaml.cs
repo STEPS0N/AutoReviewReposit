@@ -30,11 +30,13 @@ namespace AutoReview.Pages
             mainWindow = _mainWindow;
         }
 
+        //Entry обрабатывает событие входа
         private void Entry(object sender, RoutedEventArgs e)
         {
             string login = tb_login.Text;
             string password = tb_password.Password;
 
+            //Проверка заполненности полей
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Введите логин и пароль!");
@@ -43,10 +45,17 @@ namespace AutoReview.Pages
 
             try
             {
-                using (AppDbContext context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+                //Формирование строки подключения с учетными данными пользователя
+                string connectionString = $"Server=WIN-R32OTPM964O\\SQLEXPRESS;" +
+                    $"Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;" +
+                    $"MultipleActiveResultSets=true;TrustServerCertificate=True;";
+
+                using (AppDbContext context = new AppDbContext(connectionString))
                 {
+                    //Установка соединения
                     context.Database.OpenConnection();
 
+                    //Проверка прав доступа
                     try
                     {
                         using var cmd = context.Database.GetDbConnection().CreateCommand();
@@ -55,22 +64,23 @@ namespace AutoReview.Pages
 
                         if (result == 1)
                         {
-                            MessageBox.Show("Здравствуйте админ!");
-                            mainWindow.OpenPage(MainWindow.pages.menu);
+                            AuthData.Rights = true;
+                            MessageBox.Show("Здравствуйте, админ!");
                         }
                         else
                         {
                             AuthData.Rights = false;
-                            MessageBox.Show("Здравствуйте пользователь!");
-                            mainWindow.OpenPage(MainWindow.pages.menu);
+                            MessageBox.Show("Здравствуйте, пользователь!");
                         }
 
                         AuthData.Login = login;
                         AuthData.Password = password;
+
+                        mainWindow.OpenPage(MainWindow.pages.menu);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка: {ex.Message}\nПроверьте логин и пароль");
+                        MessageBox.Show($"Ошибка проверки прав: {ex.Message}\nПроверьте логин и пароль");
                     }
                     finally
                     {
@@ -78,18 +88,19 @@ namespace AutoReview.Pages
                     }
                 }
             }
+            //В случае неправлильного ввода логина и пароля появляется ошибка и
+            //Соединение с БД обрывается
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: Пользователь не найден! (Неправильный логин или пароль)");
+                MessageBox.Show($"Ошибка подключения!\nНеправильный логин или пароль");
                 return;
             }
-
         }
     }
 
 }
 
-//Server = ISP - 23 - 1 - 7\\KLIM_MILN; Database = AutoReview; User Id = { login }; Password ={ password}
+//Server =ISP-23-1-7\\KLIM_MILN; Database = AutoReview; User Id = { login }; Password ={ password}
 //; Trusted_Connection = False; MultipleActiveResultSets = true; TrustServerCertificate = True;
 
 //private void Entry(object sender, RoutedEventArgs e)

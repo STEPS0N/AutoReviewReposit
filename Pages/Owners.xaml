@@ -84,6 +84,7 @@
                           Background="White"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
+                          IsReadOnly="True"
                           HeadersVisibility="Column"
                           BorderThickness="0">
 
@@ -98,7 +99,7 @@
 
                         <DataGridTextColumn Header="Email" 
                             Binding="{Binding Owner_Email}"
-                            Width="190"/>
+                            Width="210"/>
 
                         <DataGridTextColumn Header="Телефон" 
                             Binding="{Binding Phone_number}"

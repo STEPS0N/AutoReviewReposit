@@ -26,6 +26,10 @@ namespace AutoReview.Elements
         {
             InitializeComponent();
         }
+
+        // Метод инициализации данными
+        // Загружает список автомобилей для выпадающего списка
+        // Если передана комплектация - заполняет форму для редактирования
         public void SetData(List<Car> cars, Equipment equipment = null)
         {
             CarComboBox.ItemsSource = cars;
@@ -52,11 +56,13 @@ namespace AutoReview.Elements
             }
         }
 
+        // Основные свойства
         public string Title => TitleBox.Text;
         public string Level => LevelBox.Text;
         public int? CarId => CarComboBox.SelectedValue as int?;
         public int? EquipmentId { get; set; }
 
+        //Метод для сохранения изменений и валидации данных
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (CarComboBox.SelectedValue == null)
@@ -80,6 +86,7 @@ namespace AutoReview.Elements
             OnSave?.Invoke(this);
         }
 
+        //Метод отмены изменений
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             OnCancel?.Invoke();

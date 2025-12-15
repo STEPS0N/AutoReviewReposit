@@ -28,26 +28,25 @@ namespace AutoReview.Elements
             InitializeComponent();
         }
 
+        // Основные свойства
         public string EngineType
         {
             get => TypeBox.Text;
             set => TypeBox.Text = value;
         }
-
         public string EngineCapacity
         {
             get => CapacityBox.Text;
             set => CapacityBox.Text = value;
         }
-
         public string EnginePower
         {
             get => PowerBox.Text;
             set => PowerBox.Text = value;
         }
-
         public int? EngineId { get; set; }
 
+        //Метод для сохранения изменений и валидации данных
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(EngineType))
@@ -56,19 +55,22 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\,\d$"))
+            if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || 
+                capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\,\d$"))
             {
                 MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
                 return;
             }
 
-            if (string.IsNullOrEmpty(EnginePower) || !int.TryParse(EnginePower, out int power) || power <= 1 || power >= 2000 || !System.Text.RegularExpressions.Regex.IsMatch(EnginePower, @"^\d{1,4}$"))
+            if (string.IsNullOrEmpty(EnginePower) || !int.TryParse(EnginePower, out int power) || 
+                power <= 1 || power >= 2000 || !System.Text.RegularExpressions.Regex.IsMatch(EnginePower, @"^\d{1,4}$"))
             {
                 MessageBox.Show("Введите мощность двигателя! (Пример: 150. От 1 до 2000)");
                 return;
             }
 
-            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};" +
+                $"Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
             {
                 bool alreadyExists = context.Engine.Any(eng => eng.Capacity_Engine == capacity &&
                 eng.Power_Engine == power);
@@ -81,7 +83,7 @@ namespace AutoReview.Elements
 
                 if (alreadyExists)
                 {
-                    MessageBox.Show("Такой двигатель уже существует в базе данных!");
+                    MessageBox.Show("Такой двигатель уже существует в базе данных!\n(Двигатель с таким объёмом и мощностью уже существует)");
                     return;
                 }
             }
@@ -89,6 +91,7 @@ namespace AutoReview.Elements
             OnSave?.Invoke(this);
         }
 
+        //Метод отмены изменений
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             OnCancel?.Invoke();

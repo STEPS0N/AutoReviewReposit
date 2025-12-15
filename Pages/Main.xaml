@@ -103,6 +103,14 @@
                                 Foreground="White"
                                 Height="25"
                                 Margin="10, 4, 0, 0"/>
+                        <Button Width="87"
+                                Content="Сброс"
+                                Click="btn_SearchNull"
+                                FontSize="15"
+                                FontFamily="Montserrat"
+                                Foreground="White"
+                                Height="25"
+                                Margin="10, 4, 0, 0"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -111,11 +119,12 @@
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="10,10,10,10" Grid.ColumnSpan="2">
             <Border>
                 <DataGrid x:Name="carsList"
-                  Background="White"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  HeadersVisibility="Column"
-                  BorderThickness="0">
+                          Background="White"
+                          IsReadOnly="True"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          BorderThickness="0">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" x:Name="id"

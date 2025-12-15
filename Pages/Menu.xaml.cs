@@ -29,6 +29,7 @@ namespace AutoReview.Pages
             InitializeComponent();
         }
 
+        //Все методы осуществляют переход между таблицами БД
         private void Main_Click(object sender, RoutedEventArgs e)
         {
             mainWindow.OpenPage(MainWindow.pages.main);
@@ -51,6 +52,7 @@ namespace AutoReview.Pages
 
         private void Owners_Click(object sender, RoutedEventArgs e)
         {
+            //Если вы пользователь, то не имеете права просмтаривать таблицу владельцов
             if (AuthData.Rights)
             {
                 mainWindow.OpenPage(MainWindow.pages.owners);

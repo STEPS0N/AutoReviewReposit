@@ -28,26 +28,25 @@ namespace AutoReview.Elements
             InitializeComponent();
         }
 
+        // Основные свойства
         public string OwnerFio
         {
             get => FioBox.Text;
             set => FioBox.Text = value;
         }
-
         public string OwnerEmail
         {
             get => EmailBox.Text;
             set => EmailBox.Text = value;
         }
-
         public string OwnerPhone
         {
             get => PhoneBox.Text;
             set => PhoneBox.Text = value;
         }
-
         public int? OwnerId { get; set; }
 
+        //Метод для сохранения изменений и валидации данных
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(OwnerFio))
@@ -80,18 +79,19 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
+            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};" +
+                $"Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
             {
-                bool alreadyExists = context.Owners.Any(o => o.Fio == OwnerFio || o.Owner_Email == OwnerEmail);
+                bool alreadyExists = context.Owners.Any(o => o.Phone_number == OwnerPhone || o.Owner_Email == OwnerEmail);
 
                 if (OwnerId.HasValue)
                 {
-                    alreadyExists = context.Owners.Any(o => o.Fio == OwnerFio || o.Owner_Email == OwnerEmail ||
+                    alreadyExists = context.Owners.Any(o => o.Phone_number == OwnerPhone || o.Owner_Email == OwnerEmail ||
                     o.Id_owner != OwnerId.Value);
                 }
                 if (alreadyExists)
                 {
-                    MessageBox.Show("Такой владелец уже существует в базе данных!");
+                    MessageBox.Show("Такой владелец уже существует в базе данных! Почта и номер телефона не может быть одинаковым с другими владельцами!");
                     return;
                 }
             }
@@ -99,6 +99,7 @@ namespace AutoReview.Elements
             OnSave?.Invoke(this);
         }
 
+        //Метод отмены изменений
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             OnCancel?.Invoke();

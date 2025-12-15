@@ -26,6 +26,7 @@ namespace AutoReview.Pages
         public MainWindow mainWindow;
         private AppDbContext context;
 
+        //Инициализация компонентов
         public Owners(MainWindow _mainWindow)
         {
             InitializeComponent();
@@ -34,11 +35,13 @@ namespace AutoReview.Pages
             LoadData();
         }
 
+        //Метод загрузки таблицы владельцов в DataGrid
         private void LoadData()
         {
             ownersList.ItemsSource = context.Owners.ToList();
         }
 
+        //Метод добавления владельца
         private void AddOwner(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -52,13 +55,7 @@ namespace AutoReview.Pages
                     ResizeMode = ResizeMode.NoResize
                 };
 
-                var editControl = new OwnerEditControl
-                {
-                    OwnerFio = "",
-                    OwnerEmail = "",
-                    OwnerPhone = "",
-                    OwnerId = null
-                };
+                var editControl = new OwnerEditControl();
 
                 editControl.OnSave += (control) =>
                 {
@@ -87,6 +84,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод редактирования владельца
         private void EditOwner(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)
@@ -142,6 +140,7 @@ namespace AutoReview.Pages
             }
         }
 
+        //Метод удаленияы владельца
         private void DeleteOwner(object sender, RoutedEventArgs e)
         {
             if (AuthData.Rights)

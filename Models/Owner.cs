@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Classes
 {
+    //Owner описывает ФИО, почту владельца и его номер телефона
     public class Owner
     {
         public int Id_owner { get; set; }

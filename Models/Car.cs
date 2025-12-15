@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Classes
 {
+    //Car определяет автомобиль с идентификатором, моделью,
+    //годом выпуска, типом кузова, ценой и связями с производителем и двигателем.
     public class Car
     {
         public int Id_Car { get; set; }

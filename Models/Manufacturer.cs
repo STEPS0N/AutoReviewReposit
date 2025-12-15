@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace AutoReview.Classes
 {
+    //Manufacturer описывает производителя автомобилей с названием бренда,
+    //страной производства и email владельца для связи с пользователями.
     public class Manufacturer
     {
         public int Id_Manufacturer { get; set; }
