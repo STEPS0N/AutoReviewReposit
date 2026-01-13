@@ -23,7 +23,7 @@ namespace AutoReview.Pages
         {
             InitializeComponent();
             mainWindow = _mainWindow;
-            context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;User Id={AuthData.Login};" +
+            context = new AppDbContext($"Server=ISP-23-1-7\\KLIM_MILN;Database=AutoReview;User Id={AuthData.Login};" +
                 $"Password={AuthData.Password};Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;");
             if (AuthData.Rights == false)
             {

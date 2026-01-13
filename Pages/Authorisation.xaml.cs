@@ -46,7 +46,7 @@ namespace AutoReview.Pages
             try
             {
                 //Формирование строки подключения с учетными данными пользователя
-                string connectionString = $"Server=WIN-R32OTPM964O\\SQLEXPRESS;" +
+                string connectionString = $"Server=ISP-23-1-7\\KLIM_MILN;" +
                     $"Database=AutoReview;User Id={login};Password={password};Trusted_Connection=False;" +
                     $"MultipleActiveResultSets=true;TrustServerCertificate=True;";
 

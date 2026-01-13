@@ -113,7 +113,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            using (var context = new AppDbContext($"Server=WIN-R32OTPM964O\\SQLEXPRESS;Database=AutoReview;" +
+            using (var context = new AppDbContext($"Server=ISP-23-1-7\\KLIM_MILN;Database=AutoReview;" +
                 $"User Id={AuthData.Login};Password={AuthData.Password};Trusted_Connection=False;TrustServerCertificate=True;")) 
             {
                 bool alreadyExists = context.Car.Any(car => car.Model_Car == Model && car.Manufacturer_Id == ManufacturerId.Value &&
