@@ -51,14 +51,14 @@ namespace AutoReview.Elements
         {
             if (string.IsNullOrWhiteSpace(EngineType))
             {
-                MessageBox.Show($"Введите тип двигателя");
+                MessageBox.Show($"Введите тип двигателя!");
                 return;
             }
 
             if (string.IsNullOrEmpty(EngineCapacity) || !decimal.TryParse(EngineCapacity, out decimal capacity) || 
                 capacity <= 0 || !System.Text.RegularExpressions.Regex.IsMatch(EngineCapacity, @"^\d{1,2}\,\d$"))
             {
-                MessageBox.Show("Введите объем двигателя! (Пример: 2.0)");
+                MessageBox.Show("Введите объем двигателя! (Пример: 2,0)");
                 return;
             }
 

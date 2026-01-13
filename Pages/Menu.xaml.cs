@@ -59,7 +59,7 @@ namespace AutoReview.Pages
             }
             else
             {
-                MessageBox.Show("Вы не иммете доступа к этой информации!");
+                MessageBox.Show("Вы не имеете доступа к этой информации!");
             }
         }
 

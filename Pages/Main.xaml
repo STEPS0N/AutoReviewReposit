@@ -89,6 +89,7 @@
                                    FontFamily="Montserrat"
                                    Margin="0, 5, 0, 0"/>
                         <TextBox Width="252"
+                                 Padding="3"
                                  x:Name="tb_search"
                                  FontSize="15"
                                  FontFamily="Montserrat"

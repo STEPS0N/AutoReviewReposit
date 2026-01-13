@@ -67,7 +67,7 @@ namespace AutoReview.Elements
                 return;
             }
 
-            if (!System.Text.RegularExpressions.Regex.IsMatch(OwnerEmail, @"^[A-Za-z0-9][A-Za-z0-9._%+-]+@[^@\s]+\.ru+$"))
+            if (!System.Text.RegularExpressions.Regex.IsMatch(OwnerEmail, @"^[A-Za-z0-9][A-Za-z0-9._%+-]+@[^@\s]+\.(ru|com)+$"))
             {
                 MessageBox.Show("Неверный формат email! \n Пример: permaviat@permaviat.ru");
                 return;
@@ -91,7 +91,8 @@ namespace AutoReview.Elements
                 }
                 if (alreadyExists)
                 {
-                    MessageBox.Show("Такой владелец уже существует в базе данных! Почта и номер телефона не может быть одинаковым с другими владельцами!");
+                    MessageBox.Show("Такой владелец уже существует в базе данных!" +
+                        "Почта и номер телефона не может быть одинаковым с другими владельцами!");
                     return;
                 }
             }
